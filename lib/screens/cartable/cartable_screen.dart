@@ -47,9 +47,9 @@ class _CartableScreenState extends State<CartableScreen> {
                   .getCartable(
                       token: BlocProvider.of<LoginCubit>(context).token,
                       frm: _currentMax)),
-          child: Icon(Icons.add)),
+          child: Icon(Icons.add,color: Colors.white,)),
       appBar: AppBar(
-        title: Text('عمران'),
+        title: Text('لوگو تایپ'),
         centerTitle: true,
       ),
       body: BlocConsumer<CartableCubit, CartableState>(
