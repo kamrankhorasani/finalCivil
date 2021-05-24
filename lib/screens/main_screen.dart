@@ -21,23 +21,11 @@ class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 4;
 
   List<Widget> _pages = <Widget>[
-    BlocProvider.value(
-      value: FeedCubit(),
-      child: FeedScreen(),
-    ),
+    BlocProvider.value(value: FeedCubit(), child: FeedScreen(),),
     StorageScreen(),
-    BlocProvider(
-      create: (context) => FinancialCubit(),
-      child: FinancialScreen(),
-    ),
-    BlocProvider(
-      create: (context) => CartableCubit(),
-      child: CartableScreen(),
-    ),
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (context) => MainscreenCubit()),
-        BlocProvider(
+    BlocProvider(create: (context) => FinancialCubit(), child: FinancialScreen(),),
+    BlocProvider(create: (context) => CartableCubit(), child: CartableScreen(),),
+    MultiBlocProvider(providers: [BlocProvider(create: (context) => MainscreenCubit()), BlocProvider(
           create: (context) => AlarmsCubit(),
         ),
       ],
@@ -60,7 +48,7 @@ class _MainScreenState extends State<MainScreen> {
                 EdgeInsets.symmetric(horizontal: width * 0.05, vertical: 5),
             child: GNav(
                 gap: width * 0.05,
-                activeColor: Colors.black,
+                activeColor: Colors.white,
                 color: Colors.white,
                 iconSize: 24,
                 padding:
@@ -81,7 +69,8 @@ class _MainScreenState extends State<MainScreen> {
                     text: 'مالی',
                   ),
                   GButton(
-                    icon: Icons.email,
+
+                    icon: Icons.engineering,
                     text: 'کارتابل',
                   ),
                   GButton(

@@ -37,6 +37,7 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: "Civil Project",
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(
           fontFamily: 'Vazir',
           hintColor: Colors.grey[200],
