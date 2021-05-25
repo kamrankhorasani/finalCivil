@@ -227,7 +227,15 @@ class _FinancialScreenState extends State<FinancialScreen> {
                                                 ));
                                               },
                                             ),
-                                          )
+                                          ),
+                                          Directionality(
+                                              textDirection: TextDirection.rtl,
+                                              child: Container(
+                                                height: 73,
+                                                width: 200,
+                                                child: Text(
+                                                    "sdadsadsadsadsadsadasd"),
+                                              ))
                                         ],
                                       ),
                                     ),
