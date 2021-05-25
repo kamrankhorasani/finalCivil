@@ -33,7 +33,7 @@ class _FinancialScreenState extends State<FinancialScreen> {
     BlocProvider.of<FinancialCubit>(context).getTransactions(
         token: BlocProvider.of<LoginCubit>(context).token,
         fromDate: globalDateController.text,
-        toDate:  globalDateController.text);
+        toDate: globalDateController.text);
 
     fromDatePicker = PersianDatePicker(
       controller: fromDate,
@@ -49,8 +49,10 @@ class _FinancialScreenState extends State<FinancialScreen> {
       fontFamily: 'Vazir',
       farsiDigits: true,
       onChange: (oldText, newText) async {
-        await BlocProvider.of<FinancialCubit>(context)
-            .getTransactions(  token: BlocProvider.of<LoginCubit>(context).token,fromDate: fromDate.text, toDate: toDate.text);
+        await BlocProvider.of<FinancialCubit>(context).getTransactions(
+            token: BlocProvider.of<LoginCubit>(context).token,
+            fromDate: fromDate.text,
+            toDate: toDate.text);
         Navigator.pop(context);
       },
     ).init();
@@ -62,7 +64,10 @@ class _FinancialScreenState extends State<FinancialScreen> {
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.payment_rounded),
+          child: Icon(
+            Icons.payment_rounded,
+            color: Colors.white,
+          ),
           onPressed: () => Navigator.pushNamed(context, '/payment').then(
               (value) async => await BlocProvider.of<FinancialCubit>(context)
                   .getTransactions(
@@ -73,7 +78,7 @@ class _FinancialScreenState extends State<FinancialScreen> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
         appBar: AppBar(
-          title: Align(alignment: Alignment.centerRight, child: Text('پروژه')),
+          title: Align(alignment: Alignment.center, child: Text('سیویلیتو')),
         ),
         body: Padding(
           padding: EdgeInsets.symmetric(
@@ -128,8 +133,8 @@ class _FinancialScreenState extends State<FinancialScreen> {
                             textAlign: TextAlign.center,
                             decoration:
                                 new InputDecoration.collapsed(hintText: 'از'),
-                            enableInteractiveSelection:
-                                false, // *** this is important to prevent user interactive selection ***
+                            enableInteractiveSelection: false,
+                            // *** this is important to prevent user interactive selection ***
                             onTap: () {
                               FocusScope.of(context).requestFocus(
                                   new FocusNode()); // *** to prevent opening default keyboard
@@ -151,8 +156,8 @@ class _FinancialScreenState extends State<FinancialScreen> {
                             textAlign: TextAlign.center,
                             decoration:
                                 new InputDecoration.collapsed(hintText: 'تا'),
-                            enableInteractiveSelection:
-                                false, // *** this is important to prevent user interactive selection ***
+                            enableInteractiveSelection: false,
+                            // *** this is important to prevent user interactive selection ***
                             onTap: () {
                               FocusScope.of(context).requestFocus(
                                   new FocusNode()); //*** to prevent opening default keyboard
@@ -191,64 +196,48 @@ class _FinancialScreenState extends State<FinancialScreen> {
                             return Directionality(
                               textDirection: TextDirection.rtl,
                               child: Container(
-                                decoration: containerShadow,
-                                height: height * 0.18,
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: width * 0.03),
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: width * 0.02,
-                                    vertical: height * 0.01),
-                                child: Row(
-                                  textDirection: TextDirection.rtl,
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
+                                decoration: BoxDecoration(),
+                                height: 75,
+                                margin: EdgeInsets.only(bottom: 0),
+                                child: Column(
                                   children: [
-                                    Image.network(
-                                      "${state.transactions['data']['transaction'][index]['logo']}" ??
-                                          "",
-                                      errorBuilder:
-                                          (context, exception, stacktrac) {
-                                        return Expanded(
-                                            child: Image.asset(
-                                                'assets/images/noimage.png',
-                                                color: Colors.grey));
-                                      },
+                                    Container(
+                                      height: 73,
+                                      child: Row(
+                                        children: [
+                                          Container(
+                                            height: 73,
+                                            width: 73,
+                                            alignment: Alignment.centerRight,
+                                            child: Image.network(
+                                              "${state.transactions['data']['transaction'][index]['logo']}" ??
+                                                  "",
+                                              height: double.infinity,
+                                              width: double.infinity,
+                                              fit: BoxFit.fill,
+                                              errorBuilder: (context, exception,
+                                                  stacktrac) {
+                                                return Expanded(
+                                                    child: Image.asset(
+                                                  'assets/images/noimage.png',
+                                                  color: Colors.grey,
+                                                  height: double.infinity,
+                                                  width: double.infinity,
+                                                  fit: BoxFit.fill,
+                                                ));
+                                              },
+                                            ),
+                                          )
+                                        ],
+                                      ),
                                     ),
-                                    VerticalDivider(),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(height: 10),
-                                        Text(state.transactions['data']
-                                                            ['transaction']
-                                                        [index]['receiver'] !=
-                                                    null ||
-                                                state.transactions['data']
-                                                            ['transaction']
-                                                        [index]['receiver'] ==
-                                                    ""
-                                            ? "${state.transactions['data']['transaction'][index]['receiver']}"
-                                            : "هزینه عمومی"),
-                                        Text(
-                                            "${state.transactions['data']['transaction'][index]['amount'].toString()} تومان"),
-                                        SizedBox(height: 10),
-                                        // Text(
-                                        //     "${persianConverter(state.transactions['data']['transaction'][index]['description'].toString())}")
-                                      ],
-                                    ),
-                                    SizedBox(width: width * 0.02),
-                                    Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        SizedBox(height: 10),
-                                        Text("${persianDate3.toJalaali()}"),
-                                        Text(
-                                            "${state.transactions['data']['transaction'][index]['date'].substring(10, 19)}"),
-                                        SizedBox(height: 10),
-                                      ],
-                                    ),
+                                    Expanded(
+                                        child: Container(
+                                      margin: EdgeInsets.only(right: 73),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          color: Colors.black12),
+                                    ))
                                   ],
                                 ),
                               ),

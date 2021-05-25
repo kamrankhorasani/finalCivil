@@ -1,6 +1,9 @@
+import 'dart:ffi';
+
 import 'package:civil_project/constants/constantdecorations.dart';
 import 'package:civil_project/logic/cartable_cubit/cartable_cubit.dart';
 import 'package:civil_project/logic/login_cubit/login_cubit.dart';
+import 'package:flutter/cupertino.dart';
 
 import 'package:flutter/material.dart';
 import 'package:persian_datepicker/persian_datetime.dart';
@@ -47,9 +50,12 @@ class _CartableScreenState extends State<CartableScreen> {
                   .getCartable(
                       token: BlocProvider.of<LoginCubit>(context).token,
                       frm: _currentMax)),
-          child: Icon(Icons.add,color: Colors.white,)),
+          child: Icon(
+            Icons.add,
+            color: Colors.white,
+          )),
       appBar: AppBar(
-        title: Text('لوگو تایپ'),
+        title: Text('سیویلیتو'),
         centerTitle: true,
       ),
       body: BlocConsumer<CartableCubit, CartableState>(
@@ -109,6 +115,7 @@ class _CartableScreenState extends State<CartableScreen> {
                         children: [
                           new Container(
                             height: 400,
+                            width: double.maxFinite,
                             margin: new EdgeInsets.only(right: 36),
                             decoration: new BoxDecoration(
                                 color: Colors.grey,
@@ -120,9 +127,55 @@ class _CartableScreenState extends State<CartableScreen> {
                                       blurRadius: 10,
                                       offset: new Offset(0, 10))
                                 ]),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              children: [
+                                new Container(
+                                  height: 50,
+                                  margin: EdgeInsets.fromLTRB(10, 16, 50, 0),
+                                  width: double.maxFinite,
+                                  alignment: Alignment.centerRight,
+                                  child: Text(
+                                    "${BlocProvider.of<CartableCubit>(context).crt[index]["title"]}",
+                                    style: TextStyle(
+                                        fontSize: 23,
+                                        fontWeight: FontWeight.bold),
+                                  ),
+                                ),
+                                new Container(
+                                  height: 290,
+                                  width: double.maxFinite,
+                                  alignment: Alignment.topRight,
+                                  margin: EdgeInsets.fromLTRB(15, 15, 15, 0),
+                                  child: Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: Text(
+                                      "${BlocProvider.of<CartableCubit>(context).crt[index]["from_user"]}",
+                                      style: TextStyle(),
+                                    ),
+                                  ),
+                                ),
+                                Expanded(
+                                  child: new Container(
+                                      margin: const EdgeInsets.only(left: 10.0, right: 15.0),
+                                      child: Divider(
+                                        color: Colors.black,
+                                        height: 1,
+                                      )),
+                                ),
+                                new Container(
+                                  height: 24,
+                                  alignment: Alignment.centerLeft,
+                                  margin: EdgeInsets.fromLTRB(15, 0, 5, 5),
+                                  width: double.maxFinite,
+                                  child: Text("${persianDate3.toJalaali()} ${BlocProvider.of<CartableCubit>(context).crt[index]["date"].toString().substring(11)}",style: TextStyle(fontSize: 11,fontWeight: FontWeight.w100,color: Colors.white),),
+                                ),
+                              ],
+                            ),
                           ),
                           new Container(
-                            margin: const EdgeInsets.symmetric(vertical: 16,horizontal: 20),
+                            margin: const EdgeInsets.symmetric(
+                                vertical: 16, horizontal: 20),
                             child: new Stack(
                               alignment: Alignment.center,
                               children: <Widget>[

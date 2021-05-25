@@ -6,9 +6,9 @@ BoxDecoration containerShadow = BoxDecoration(
   boxShadow: [
     BoxShadow(
       color: Colors.grey[800],
-      spreadRadius: 2,
-      blurRadius: 1,
-      offset: Offset(2, 2), // changes position of shadow
+      spreadRadius: 0.5,
+      blurRadius: 0.5,
+      offset: Offset(0.5, 1), // changes position of shadow
     ),
   ],
 );
@@ -21,6 +21,8 @@ bool urlDetection(String address) {
   return regExp.hasMatch(address);
 
 }
+
+
 // persianConverter(String string) {
 //   const persianNumbers = ["۰", "۱", "۲", "۳", "۴", "۵", "۶", "۷", "۸", "۹"];
 //   const arabicNumbers = ["٠", "١", "٢", "٣", "٤", "٥", "٦", "٧", "٨", "٩"];

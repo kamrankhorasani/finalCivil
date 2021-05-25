@@ -35,7 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('عمران'),
+        title: const Text('سیویلیتو'),
       ),
       body: BlocBuilder<HomescreenCubit, HomescreenState>(
         builder: (context, state) {
