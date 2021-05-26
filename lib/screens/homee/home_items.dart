@@ -12,8 +12,7 @@ import 'package:tree_view/tree_view.dart';
 
 bool isSelectted = false;
 int globalChoiceActivityId;
-TextEditingController globalDateController =
-    TextEditingController(text: Jalaali.now().toString());
+TextEditingController globalDateController = TextEditingController(text: Jalaali.now().toString());
 
 class HomeItems extends StatefulWidget {
   static const List<List> titleText = [
@@ -40,26 +39,18 @@ class HomeItems extends StatefulWidget {
 
 class _HomeItemsState extends State<HomeItems> {
   PersianDatePickerWidget _datePicker;
+
   @override
   void initState() {
     super.initState();
     BlocProvider.of<LoginCubit>(context).loadToken();
-    _datePicker = PersianDatePicker(
-            controller: globalDateController,
-            datetime: Jalaali.now().toString(),
-            fontFamily: 'Vazir',
-            farsiDigits: true)
-        .init();
+    _datePicker = PersianDatePicker(controller: globalDateController, datetime: Jalaali.now().toString(), fontFamily: 'Vazir', farsiDigits: true).init();
     BlocProvider.of<MainscreenCubit>(context).getWbs(
       token: BlocProvider.of<LoginCubit>(context).token,
       projectId: BlocProvider.of<LoginCubit>(context).projectId,
     );
-    BlocProvider.of<AlarmsCubit>(context).getAlarms(
-        token: BlocProvider.of<LoginCubit>(context).token,
-        projectId: BlocProvider.of<LoginCubit>(context).projectId,
-        isRead: 0,
-        frm: 0,
-        cnt: 10);
+    BlocProvider.of<AlarmsCubit>(context)
+        .getAlarms(token: BlocProvider.of<LoginCubit>(context).token, projectId: BlocProvider.of<LoginCubit>(context).projectId, isRead: 0, frm: 0, cnt: 10);
   }
 
   @override
@@ -72,7 +63,6 @@ class _HomeItemsState extends State<HomeItems> {
         appBar: AppBar(
           centerTitle: true,
           title: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Stack(
@@ -84,50 +74,26 @@ class _HomeItemsState extends State<HomeItems> {
                       size: height * 0.05,
                     ),
                     onPressed: () {
-                      showMenu(
-                          useRootNavigator: true,
-                          context: context,
-                          position: RelativeRect.fromLTRB(100, 100, 100, 100),
-                          color: Colors.grey[600],
-                          items: [
-                            PopupMenuItem(
-                              child: ListTile(
-                                title: Text(
-                                    BlocProvider.of<AlarmsCubit>(context)
-                                                .alarms['data']["items"][0]
-                                            ["resource_title"] ??
-                                        ""),
-                                trailing: Icon(Icons.notifications_active),
-                                subtitle: Text(
-                                    BlocProvider.of<AlarmsCubit>(context)
-                                                .alarms['data']["items"][1]
-                                            ["activity_title"] ??
-                                        ""),
-                              ),
-                            ),
-                            PopupMenuItem(
-                              child: ListTile(
-                                title: Text(
-                                    BlocProvider.of<AlarmsCubit>(context)
-                                                .alarms['data']["items"][1]
-                                            ["resource_title"] ??
-                                        ""),
-                                trailing: Icon(Icons.notifications_active),
-                                subtitle: Text(
-                                    BlocProvider.of<AlarmsCubit>(context)
-                                                .alarms['data']["items"][1]
-                                            ["activity_title"] ??
-                                        ""),
-                              ),
-                            ),
-                            PopupMenuItem(
-                                child: Center(
-                              child: GestureDetector(
-                                  onTap: () =>
-                                      Navigator.pushNamed(context, "/alarm"),
-                                  child: Text("نمایش همه")),
-                            ))
-                          ]);
+                      showMenu(useRootNavigator: true, context: context, position: RelativeRect.fromLTRB(100, 100, 100, 100), color: Colors.grey[600], items: [
+                        PopupMenuItem(
+                          child: ListTile(
+                            title: Text(BlocProvider.of<AlarmsCubit>(context).alarms['data']["items"][0]["resource_title"] ?? ""),
+                            trailing: Icon(Icons.notifications_active),
+                            subtitle: Text(BlocProvider.of<AlarmsCubit>(context).alarms['data']["items"][1]["activity_title"] ?? ""),
+                          ),
+                        ),
+                        PopupMenuItem(
+                          child: ListTile(
+                            title: Text(BlocProvider.of<AlarmsCubit>(context).alarms['data']["items"][1]["resource_title"] ?? ""),
+                            trailing: Icon(Icons.notifications_active),
+                            subtitle: Text(BlocProvider.of<AlarmsCubit>(context).alarms['data']["items"][1]["activity_title"] ?? ""),
+                          ),
+                        ),
+                        PopupMenuItem(
+                            child: Center(
+                          child: GestureDetector(onTap: () => Navigator.pushNamed(context, "/alarm"), child: Text("نمایش همه")),
+                        ))
+                      ]);
                     },
                   ),
                   Positioned(
@@ -146,14 +112,13 @@ class _HomeItemsState extends State<HomeItems> {
                           return Text("");
                         },
                       ),
-                      decoration: BoxDecoration(
-                          shape: BoxShape.circle, color: Colors.black),
+                      decoration: BoxDecoration(shape: BoxShape.circle, color: Colors.black),
                     ),
                   )
                 ],
               ),
               SizedBox(width: 35),
-              Expanded(child: Text('Civil')),
+              Expanded(child: Text('سیویلیتو')),
             ],
           ),
           leading: Builder(
@@ -168,10 +133,7 @@ class _HomeItemsState extends State<HomeItems> {
         endDrawer: Drawer(
           child: ListView(
             children: [
-              DrawerHeader(
-                  child: Center(
-                      child: Text("پروژه عمرانی",
-                          style: TextStyle(fontSize: width * 0.1)))),
+              DrawerHeader(child: Center(child: Text("پروژه عمرانی", style: TextStyle(fontSize: width * 0.1)))),
               Card(
                 child: ListTile(
                   title: Text("پروژه های من"),
@@ -209,75 +171,62 @@ class _HomeItemsState extends State<HomeItems> {
                   child: BlocBuilder<MainscreenCubit, MainscreenState>(
                     builder: (context, state) {
                       if (state is WBSLoaded) {
-                        if (state.users['data'] == null ||
-                            state.users['success'] == false) {
+                        if (state.users['data'] == null || state.users['success'] == false) {
                           return Text("چیزی برای نمایش وجود ندارد");
                         }
-                        BlocProvider.of<ConfigurCubit>(context).users =
-                            state.users['data'];
-                        return ListView.separated(
-                          scrollDirection: Axis.horizontal,
-                          separatorBuilder: (context, index) =>
-                              SizedBox(width: 8),
-                          itemCount: (state.users['data'] as List).length,
-                          itemBuilder: (context, index) => Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  if (globalChoiceActivityId != null) {
-                                    setState(() {
-                                      BlocProvider.of<ConfigurCubit>(context)
-                                              .itemId =
-                                          state.users['data'][index]['id'];
-                                    });
-                                    Navigator.pushNamed(
-                                        context, "/addcartable");
-                                  } else {
-                                    await showDialog(
-                                        context: context,
-                                        builder: (ctx) {
-                                          return AlertDialog(
-                                            title: Text(
-                                              "لطفا برای ادامه کار یک فعالیت انتخاب کنید",
-                                              textDirection: TextDirection.rtl,
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                  onPressed: () =>
-                                                      Navigator.pop(context),
-                                                  child: Text(
-                                                    "باشه",
-                                                    textDirection:
-                                                        TextDirection.rtl,
-                                                  ))
-                                            ],
-                                          );
-                                        });
-                                  }
-                                },
-                                child: CircleAvatar(
-                                  minRadius: 30,
-                                  backgroundColor: Colors.yellow,
-                                  onBackgroundImageError:
-                                      (exception, stackTrace) => print(""),
-                                  backgroundImage: NetworkImage(state
-                                      .users['data'][index]['pic']
-                                      .toString()),
+                        BlocProvider.of<ConfigurCubit>(context).users = state.users['data'];
+                        return Container(
+                          margin: EdgeInsets.only(left: 15),
+                          child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            separatorBuilder: (context, index) => SizedBox(width: 8),
+                            itemCount: (state.users['data'] as List).length,
+                            itemBuilder: (context, index) => Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    if (globalChoiceActivityId != null) {
+                                      setState(() {
+                                        BlocProvider.of<ConfigurCubit>(context).itemId = state.users['data'][index]['id'];
+                                      });
+                                      Navigator.pushNamed(context, "/addcartable");
+                                    } else {
+                                      await showDialog(
+                                          context: context,
+                                          builder: (ctx) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                "لطفا برای ادامه کار یک فعالیت انتخاب کنید",
+                                                textDirection: TextDirection.rtl,
+                                              ),
+                                              actions: [
+                                                TextButton(
+                                                    onPressed: () => Navigator.pop(context),
+                                                    child: Text(
+                                                      "باشه",
+                                                      textDirection: TextDirection.rtl,
+                                                    ))
+                                              ],
+                                            );
+                                          });
+                                    }
+                                  },
+                                  child: CircleAvatar(
+                                    minRadius: 30,
+                                    backgroundColor: Colors.grey,
+                                    onBackgroundImageError: (exception, stackTrace) => print(""),
+                                    backgroundImage: NetworkImage(state.users['data'][index]['pic'].toString()),
+                                  ),
                                 ),
-                              ),
-                              Center(
-                                child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    Text(
-                                        "${state.users['data'][index]['firstName']} "),
-                                    Text(
-                                        "${state.users['data'][index]['lastName']} ")
-                                  ],
-                                ),
-                              )
-                            ],
+                                Center(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [Text("${state.users['data'][index]['firstName']} "), Text("${state.users['data'][index]['lastName']} ")],
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
                         );
                       }
@@ -286,81 +235,78 @@ class _HomeItemsState extends State<HomeItems> {
                   ),
                 ),
               ),
-              SizedBox(height: 5),
               Divider(color: Colors.black87),
-              Row(
-                textDirection: TextDirection.rtl,
-                children: [
-                  Builder(
-                    builder: (context) => GestureDetector(
-                        onTap: () => Scaffold.of(context).openDrawer(),
-                        child: Text(":فعالیت")),
-                  ),
-                  Expanded(
-                    child: Builder(
-                      builder: (context) => GestureDetector(
-                        onTap: () => Scaffold.of(context).openDrawer(),
-                        child: Container(
-                            height: height * 0.05,
-                            decoration: containerShadow.copyWith(
-                              boxShadow: [
-                                BoxShadow(
-                                  color: Colors.white,
-                                  spreadRadius: 0,
-                                  blurRadius: 0,
-                                  offset: Offset(
-                                      0, 0), // changes position of shadow
-                                ),
-                              ],
+              Container(
+                margin: EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  textDirection: TextDirection.rtl,
+                  children: [
+                    Builder(
+                      builder: (context) => GestureDetector(onTap: () => Scaffold.of(context).openDrawer(), child: Text(":فعالیت")),
+                    ),
+                    Expanded(
+                      child: Builder(
+                        builder: (context) => GestureDetector(
+                          onTap: () => Scaffold.of(context).openDrawer(),
+                          child: Container(
+                              height: height * 0.05,
+                              decoration: containerShadow.copyWith(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.white,
+                                    spreadRadius: 0,
+                                    blurRadius: 0,
+                                    offset: Offset(0, 0), // changes position of shadow
+                                  ),
+                                ],
+                              ),
+                              margin: EdgeInsets.symmetric(horizontal: 5),
+                              child: Center(child: BlocBuilder<ConfigurCubit, ConfigurState>(
+                                builder: (context, state) {
+                                  if (state is ConfigurInitial) {
+                                    return Text(state.actitle);
+                                  }
+                                  return Text('');
+                                },
+                              ))),
+                        ),
+                      ),
+                    ),
+                    Text(" :تاریخ"),
+                    Expanded(
+                      child: Container(
+                        decoration: containerShadow.copyWith(
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.white,
+                              spreadRadius: 0,
+                              blurRadius: 0,
+                              offset: Offset(0, 0), // changes position of shadow
                             ),
-                            margin: EdgeInsets.symmetric(horizontal: 5),
-                            child: Center(child:
-                                BlocBuilder<ConfigurCubit, ConfigurState>(
-                              builder: (context, state) {
-                                if (state is ConfigurInitial) {
-                                  return Text(state.actitle);
-                                }
-                                return Text('');
+                          ],
+                        ),
+                        height: height * 0.05,
+                        child: Center(
+                          child: TextField(
+                              textAlign: TextAlign.center,
+                              decoration: InputDecoration.collapsed(hintText: ""),
+                              enableInteractiveSelection: false,
+                              // *** this is important to prevent user interactive selection ***
+                              onTap: () {
+                                FocusScope.of(context).requestFocus(FocusNode()); // *** to prevent opening default keyboard
+                                showModalBottomSheet(
+                                    isScrollControlled: false,
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return _datePicker;
+                                    });
                               },
-                            ))),
+                              controller: globalDateController),
+                        ),
                       ),
                     ),
-                  ),
-                  Text(":تاریخ"),
-                  Expanded(
-                    child: Container(
-                      decoration: containerShadow.copyWith(
-                        boxShadow: [
-                          BoxShadow(
-                            color: Colors.white,
-                            spreadRadius: 0,
-                            blurRadius: 0,
-                            offset: Offset(0, 0), // changes position of shadow
-                          ),
-                        ],
-                      ),
-                      height: height * 0.05,
-                      child: Center(
-                        child: TextField(
-                            textAlign: TextAlign.center,
-                            decoration: InputDecoration.collapsed(hintText: ""),
-                            enableInteractiveSelection:
-                                false, // *** this is important to prevent user interactive selection ***
-                            onTap: () {
-                              FocusScope.of(context).requestFocus(
-                                  FocusNode()); // *** to prevent opening default keyboard
-                              showModalBottomSheet(
-                                  isScrollControlled: false,
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return _datePicker;
-                                  });
-                            },
-                            controller: globalDateController),
-                      ),
-                    ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Divider(color: Colors.black87),
               GridView.builder(
@@ -377,8 +323,7 @@ class _HomeItemsState extends State<HomeItems> {
                   return GestureDetector(
                     onTap: () async {
                       if (globalChoiceActivityId != null) {
-                        Navigator.pushNamed(
-                            context, HomeItems.titleText[index][1]);
+                        Navigator.pushNamed(context, HomeItems.titleText[index][1]);
                       } else {
                         await showDialog(
                             context: context,
@@ -405,9 +350,7 @@ class _HomeItemsState extends State<HomeItems> {
                         CircleAvatar(
                           radius: 30,
                           backgroundColor: Colors.amber,
-                          child: Center(
-                              child: Icon(HomeItems.titleText[index][2],
-                                  size: 35, color: Colors.black)),
+                          child: Center(child: Icon(HomeItems.titleText[index][2], size: 35, color: Colors.black)),
                         ),
                         Text(
                           HomeItems.titleText[index][0],

@@ -30,10 +30,8 @@ class _FinancialScreenState extends State<FinancialScreen> {
   void initState() {
     super.initState();
 
-    BlocProvider.of<FinancialCubit>(context).getTransactions(
-        token: BlocProvider.of<LoginCubit>(context).token,
-        fromDate: globalDateController.text,
-        toDate: globalDateController.text);
+    BlocProvider.of<FinancialCubit>(context)
+        .getTransactions(token: BlocProvider.of<LoginCubit>(context).token, fromDate: globalDateController.text, toDate: globalDateController.text);
 
     fromDatePicker = PersianDatePicker(
       controller: fromDate,
@@ -49,10 +47,7 @@ class _FinancialScreenState extends State<FinancialScreen> {
       fontFamily: 'Vazir',
       farsiDigits: true,
       onChange: (oldText, newText) async {
-        await BlocProvider.of<FinancialCubit>(context).getTransactions(
-            token: BlocProvider.of<LoginCubit>(context).token,
-            fromDate: fromDate.text,
-            toDate: toDate.text);
+        await BlocProvider.of<FinancialCubit>(context).getTransactions(token: BlocProvider.of<LoginCubit>(context).token, fromDate: fromDate.text, toDate: toDate.text);
         Navigator.pop(context);
       },
     ).init();
@@ -68,12 +63,8 @@ class _FinancialScreenState extends State<FinancialScreen> {
             Icons.payment_rounded,
             color: Colors.white,
           ),
-          onPressed: () => Navigator.pushNamed(context, '/payment').then(
-              (value) async => await BlocProvider.of<FinancialCubit>(context)
-                  .getTransactions(
-                      token: BlocProvider.of<LoginCubit>(context).token,
-                      fromDate: globalDateController.text,
-                      toDate: globalDateController.text)),
+          onPressed: () => Navigator.pushNamed(context, '/payment').then((value) async => await BlocProvider.of<FinancialCubit>(context)
+              .getTransactions(token: BlocProvider.of<LoginCubit>(context).token, fromDate: globalDateController.text, toDate: globalDateController.text)),
           backgroundColor: Colors.amber[500],
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
@@ -81,8 +72,7 @@ class _FinancialScreenState extends State<FinancialScreen> {
           title: Align(alignment: Alignment.center, child: Text('سیویلیتو')),
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: width * 0.05, vertical: height * 0.01),
+          padding: EdgeInsets.symmetric(horizontal: width * 0.05, vertical: height * 0.01),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -105,9 +95,7 @@ class _FinancialScreenState extends State<FinancialScreen> {
                             if (state.transactions['data'] == null) {
                               return Center(child: Text("بدون مقدار"));
                             } else {
-                              return Text(
-                                  "${state.transactions['data']['balance'].toString()}",
-                                  style: TextStyle(fontSize: width * 0.09));
+                              return Text("${state.transactions['data']['balance'].toString()}", style: TextStyle(fontSize: width * 0.09));
                             }
                           }
                           return Center(child: Text("بدون مقدار"));
@@ -131,13 +119,11 @@ class _FinancialScreenState extends State<FinancialScreen> {
                       child: Center(
                         child: TextField(
                             textAlign: TextAlign.center,
-                            decoration:
-                                new InputDecoration.collapsed(hintText: 'از'),
+                            decoration: new InputDecoration.collapsed(hintText: 'از'),
                             enableInteractiveSelection: false,
                             // *** this is important to prevent user interactive selection ***
                             onTap: () {
-                              FocusScope.of(context).requestFocus(
-                                  new FocusNode()); // *** to prevent opening default keyboard
+                              FocusScope.of(context).requestFocus(new FocusNode()); // *** to prevent opening default keyboard
                               showModalBottomSheet(
                                   isScrollControlled: true,
                                   context: context,
@@ -154,13 +140,11 @@ class _FinancialScreenState extends State<FinancialScreen> {
                       child: Center(
                         child: TextField(
                             textAlign: TextAlign.center,
-                            decoration:
-                                new InputDecoration.collapsed(hintText: 'تا'),
+                            decoration: new InputDecoration.collapsed(hintText: 'تا'),
                             enableInteractiveSelection: false,
                             // *** this is important to prevent user interactive selection ***
                             onTap: () {
-                              FocusScope.of(context).requestFocus(
-                                  new FocusNode()); //*** to prevent opening default keyboard
+                              FocusScope.of(context).requestFocus(new FocusNode()); //*** to prevent opening default keyboard
                               showModalBottomSheet(
                                   isScrollControlled: true,
                                   context: context,
@@ -186,13 +170,9 @@ class _FinancialScreenState extends State<FinancialScreen> {
                     } else {
                       return Expanded(
                         child: ListView.builder(
-                          itemCount: (state.transactions['data']['transaction']
-                                  as List)
-                              .length,
+                          itemCount: (state.transactions['data']['transaction'] as List).length,
                           itemBuilder: (context, index) {
-                            persianDate3 = PersianDateTime.fromGregorian(
-                                gregorianDateTime:
-                                    "${state.transactions['data']['transaction'][index]['date'].substring(0, 9)}");
+                            persianDate3 = PersianDateTime.fromGregorian(gregorianDateTime: "${state.transactions['data']['transaction'][index]['date'].substring(0, 9)}");
                             return Directionality(
                               textDirection: TextDirection.rtl,
                               child: Container(
@@ -210,13 +190,11 @@ class _FinancialScreenState extends State<FinancialScreen> {
                                             width: 73,
                                             alignment: Alignment.centerRight,
                                             child: Image.network(
-                                              "${state.transactions['data']['transaction'][index]['logo']}" ??
-                                                  "",
+                                              "${state.transactions['data']['transaction'][index]['logo']}" ?? "",
                                               height: double.infinity,
                                               width: double.infinity,
                                               fit: BoxFit.fill,
-                                              errorBuilder: (context, exception,
-                                                  stacktrac) {
+                                              errorBuilder: (context, exception, stacktrac) {
                                                 return Expanded(
                                                     child: Image.asset(
                                                   'assets/images/noimage.png',
@@ -235,28 +213,13 @@ class _FinancialScreenState extends State<FinancialScreen> {
                                             child: Directionality(
                                               textDirection: TextDirection.rtl,
                                               child: Text(
-                                                state.transactions['data'][
-                                                                    'transaction']
-                                                                    [index]
-                                                                    ['receiver']
-                                                                .toString()
-                                                                .trim() !=
-                                                            null &&
-                                                        state.transactions[
-                                                                    'data'][
-                                                                    'transaction']
-                                                                    [index]
-                                                                    ['receiver']
-                                                                .toString()
-                                                                .trim() !=
-                                                            ""
+                                                state.transactions['data']['transaction'][index]['receiver'].toString().trim() != null &&
+                                                        state.transactions['data']['transaction'][index]['receiver'].toString().trim() != ""
                                                     ? "${state.transactions['data']['transaction'][index]['receiver']}"
                                                     : "هزینه عمومی",
                                                 maxLines: 1,
                                                 overflow: TextOverflow.ellipsis,
-                                                style: TextStyle(
-                                                    fontWeight: FontWeight.w700,
-                                                    fontSize: 18),
+                                                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 18),
                                               ),
                                             ),
                                           ),
@@ -265,35 +228,21 @@ class _FinancialScreenState extends State<FinancialScreen> {
                                               height: 73,
                                               child: Column(
                                                 children: [
-                                                  Container(alignment: Alignment.topLeft,
-                                                    margin: EdgeInsets.only(
-                                                        top: 12, left: 5),
-                                                    child: Text(
-                                                        "${state.transactions['data']['transaction'][index]['amount'].toString()} تومان",
+                                                  Container(
+                                                    alignment: Alignment.topLeft,
+                                                    margin: EdgeInsets.only(top: 12, left: 5),
+                                                    child: Text("${state.transactions['data']['transaction'][index]['amount'].toString()} تومان",
                                                         maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w400,
-                                                            color: Colors.white,
-                                                            fontSize: 16)),
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(fontWeight: FontWeight.w400, color: Colors.white, fontSize: 16)),
                                                   ),
                                                   Container(
-                                                    alignment:
-                                                        Alignment.topLeft,
-                                                    margin: EdgeInsets.only(
-                                                        top: 18, left: 5),
-                                                    child: Text(
-                                                        "${state.transactions['data']['transaction'][index]['date'].substring(10, 19)}  "+"${persianDate3.toJalaali()}",
+                                                    alignment: Alignment.topLeft,
+                                                    margin: EdgeInsets.only(top: 18, left: 5),
+                                                    child: Text("${state.transactions['data']['transaction'][index]['date'].substring(10, 19)}  " + "${persianDate3.toJalaali()}",
                                                         maxLines: 1,
-                                                        overflow: TextOverflow
-                                                            .ellipsis,
-                                                        style: TextStyle(
-                                                            fontWeight:
-                                                                FontWeight.w100,
-                                                            color: Colors.yellowAccent,
-                                                            fontSize: 10)),
+                                                        overflow: TextOverflow.ellipsis,
+                                                        style: TextStyle(fontWeight: FontWeight.w100, color: Colors.yellowAccent, fontSize: 10)),
                                                   )
                                                 ],
                                               ),
@@ -305,9 +254,7 @@ class _FinancialScreenState extends State<FinancialScreen> {
                                     Expanded(
                                         child: Container(
                                       margin: EdgeInsets.only(right: 73),
-                                      decoration: BoxDecoration(
-                                          shape: BoxShape.rectangle,
-                                          color: Colors.black12),
+                                      decoration: BoxDecoration(shape: BoxShape.rectangle, color: Colors.black12),
                                     ))
                                   ],
                                 ),
