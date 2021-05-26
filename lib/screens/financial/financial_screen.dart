@@ -228,14 +228,77 @@ class _FinancialScreenState extends State<FinancialScreen> {
                                               },
                                             ),
                                           ),
-                                          Directionality(
+                                          Container(
+                                            margin: EdgeInsets.only(top: 10),
+                                            height: 73,
+                                            width: 160,
+                                            child: Directionality(
                                               textDirection: TextDirection.rtl,
-                                              child: Container(
-                                                height: 73,
-                                                width: 200,
-                                                child: Text(
-                                                    "sdadsadsadsadsadsadasd"),
-                                              ))
+                                              child: Text(
+                                                state.transactions['data'][
+                                                                    'transaction']
+                                                                    [index]
+                                                                    ['receiver']
+                                                                .toString()
+                                                                .trim() !=
+                                                            null &&
+                                                        state.transactions[
+                                                                    'data'][
+                                                                    'transaction']
+                                                                    [index]
+                                                                    ['receiver']
+                                                                .toString()
+                                                                .trim() !=
+                                                            ""
+                                                    ? "${state.transactions['data']['transaction'][index]['receiver']}"
+                                                    : "هزینه عمومی",
+                                                maxLines: 1,
+                                                overflow: TextOverflow.ellipsis,
+                                                style: TextStyle(
+                                                    fontWeight: FontWeight.w700,
+                                                    fontSize: 18),
+                                              ),
+                                            ),
+                                          ),
+                                          Expanded(
+                                            child: Container(
+                                              height: 73,
+                                              child: Column(
+                                                children: [
+                                                  Container(alignment: Alignment.topLeft,
+                                                    margin: EdgeInsets.only(
+                                                        top: 12, left: 5),
+                                                    child: Text(
+                                                        "${state.transactions['data']['transaction'][index]['amount'].toString()} تومان",
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w400,
+                                                            color: Colors.white,
+                                                            fontSize: 16)),
+                                                  ),
+                                                  Container(
+                                                    alignment:
+                                                        Alignment.topLeft,
+                                                    margin: EdgeInsets.only(
+                                                        top: 18, left: 5),
+                                                    child: Text(
+                                                        "${state.transactions['data']['transaction'][index]['date'].substring(10, 19)}  "+"${persianDate3.toJalaali()}",
+                                                        maxLines: 1,
+                                                        overflow: TextOverflow
+                                                            .ellipsis,
+                                                        style: TextStyle(
+                                                            fontWeight:
+                                                                FontWeight.w100,
+                                                            color: Colors.yellowAccent,
+                                                            fontSize: 10)),
+                                                  )
+                                                ],
+                                              ),
+                                            ),
+                                          )
                                         ],
                                       ),
                                     ),
