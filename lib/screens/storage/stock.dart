@@ -2,6 +2,7 @@ import 'package:civil_project/constants/constantdecorations.dart';
 import 'package:civil_project/logic/login_cubit/login_cubit.dart';
 import 'package:civil_project/logic/storeage_stock_cubit/storeagestock_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class StorageStock extends StatefulWidget {
@@ -40,41 +41,74 @@ class _StorageStockState extends State<StorageStock> {
               itemCount: state.stock['data'].length,
               itemBuilder: (context, index) {
                 return Container(
-                    decoration: containerShadow,
-                    height: height * 0.15,
-                    margin: EdgeInsets.symmetric(
-                        horizontal: width * 0.05, vertical: height * 0.03),
-                    padding: EdgeInsets.symmetric(
-                        horizontal: width * 0.04, vertical: height * 0.01),
-                    child: Row(
-                      textDirection: TextDirection.rtl,
-                      children: [
-                        Expanded(
-                            child: Image.asset(
-                          'assets/images/noimage.png',
-                          color: Colors.grey,
-                        )),
-                        VerticalDivider(color: Colors.grey),
-                        Expanded(
-                          child: Column(
-                            textDirection: TextDirection.rtl,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('${state.stock['data'][index]['title']}'),
-                              Row(
-                                textDirection: TextDirection.rtl,
-                                children: [
-                                  Text(
-                                      '${state.stock['data'][index]['amount']}'),
-                                  Text('${state.stock['data'][index]['unit']}'),
-                                ],
-                              )
-                            ],
+                  height: 250,
+                  child: Stack(
+                    alignment: Alignment.topRight,
+                    children: [
+                      Container(
+                        height: double.infinity,
+                        width: double.infinity,
+                        margin: EdgeInsets.only(left: 10, top: 20, right: 40),
+                        decoration: containerShadow,
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Container(
+                              alignment: Alignment.topRight,
+                              margin:
+                                  EdgeInsets.only(right: 30, top: 30, left: 10),
+                              child: Expanded(
+                                flex: 2,
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: Text(
+                                      '${state.stock['data'][index]['title']}',
+                                      style: TextStyle(
+                                          color: Colors.white, fontSize: 15),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            Container(
+                              alignment: Alignment.topRight,
+                              margin: EdgeInsets.only(
+                                  right: 30, top: 30, left: 10, bottom: 10),
+                              child: Expanded(
+                                  flex: 1,
+                                  child: Directionality(
+                                      textDirection: TextDirection.rtl,
+                                      child: Text('مقدار: ' +
+                                          '${state.stock['data'][index]['amount']}' +
+                                          ' ${state.stock['data'][index]['unit']}'))),
+                            )
+                          ],
+                        ),
+                      ),
+                      Container(
+                        height: 50,
+                        width: 50,
+                        padding: EdgeInsets.all(6),
+                        margin: EdgeInsets.only(right: 10, top: 40),
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(5),
+                            shape: BoxShape.rectangle,
+                            color: Colors.white),
+                        child: Image.asset(
+                          "assets/images/" +
+                              "${state.stock['data'][index]['logo'].toString().toLowerCase()}",
+                          errorBuilder: (context, error, stacktrace) =>
+                              Image.asset(
+                            "assets/images/noimage.png",
+                            color: Colors.grey,
                           ),
-                        )
-                      ],
-                    ));
+                        ),
+                      )
+                    ],
+                  ),
+                );
               },
             );
           } else

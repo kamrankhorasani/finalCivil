@@ -37,6 +37,7 @@ String numConverter(String string, {bool isDate = true}) {
 
 class Routing {
   final ntk = NetWorkHelper();
+
   userLogin(String mobile) {
     return ntk.apiCaller(params: {'mobile': mobile}, route: "user/Login");
   }
@@ -207,6 +208,12 @@ class Routing {
       'date_in': numConverter(dateIn),
       'amount': double.parse(amount),
     }, route: "anbar/out/add");
+  }
+
+  setCurrentProject(@required String token, String phone, int projectId) {
+    return ntk.apiCaller(
+        params: {'token': token, 'projectId': projectId, 'mobile': phone},
+        route: "active/project/update");
   }
 
   addProvider(

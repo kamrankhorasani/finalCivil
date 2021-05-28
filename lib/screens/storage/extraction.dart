@@ -4,6 +4,7 @@ import 'package:civil_project/logic/storeage_get_extract_cubit/storeage_get_extr
 import 'package:civil_project/screens/homee/home_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:persian_datepicker/persian_datetime.dart';
 
 class StorageExtraction extends StatefulWidget {
   @override
@@ -46,17 +47,18 @@ class _StorageExtractionState extends State<StorageExtraction> {
                   } else {
                     showDialog(
                         builder: (context) => AlertDialog(
-                          title:
-                              Text("لطفا برای ادامه کار یک فعالیت انتخاب کنید"),
-                          actions: [
-                            TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: Text("باشه"))
-                          ],
-                        ), context: context);
+                              title: Text(
+                                  "لطفا برای ادامه کار یک فعالیت انتخاب کنید"),
+                              actions: [
+                                TextButton(
+                                    onPressed: () => Navigator.pop(context),
+                                    child: Text("باشه"))
+                              ],
+                            ),
+                        context: context);
                   }
                 },
-                child: Icon(Icons.add))
+                child: Icon(Icons.add,color: Colors.white,))
           ],
         ),
         body: Column(
@@ -77,79 +79,182 @@ class _StorageExtractionState extends State<StorageExtraction> {
                             return Directionality(
                               textDirection: TextDirection.rtl,
                               child: Container(
-                                height: height * 0.3,
-                                width: double.minPositive,
-                                decoration: containerShadow,
-                                margin: EdgeInsets.symmetric(
-                                    horizontal: width * 0.05,
-                                    vertical: height * 0.03),
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: width * 0.06),
-                                child: Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  crossAxisAlignment:
-                                      CrossAxisAlignment.stretch,
+                                margin: EdgeInsets.all(5),
+                                height: 200,
+                                child: Stack(
+                                  alignment: Alignment.topRight,
                                   children: [
-                                    Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        Center(
-                                            child: Image.network(
-                                          '${state.extraction['data'][index]['logo']}',
+                                    Container(
+                                      margin: EdgeInsets.only(right: 40,left: 5),
+                                      decoration: BoxDecoration(
+                                        color: Colors.grey[600],
+                                        borderRadius: BorderRadius.all(
+                                            Radius.circular(5)),
+                                        boxShadow: [
+                                          BoxShadow(
+                                            color: Colors.grey[800],
+                                            spreadRadius: 0.5,
+                                            blurRadius: 0.5,
+                                            offset: Offset(0.5,
+                                                1), // changes position of shadow
+                                          ),
+                                        ],
+                                      ),
+                                      child: Expanded(
+                                        child: Column(
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.topRight,
+                                              height: 150,
+                                              margin: EdgeInsets.only(
+                                                  top: 30, right: 35),
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    flex: 2,
+                                                    child: Container(alignment: Alignment.topRight,
+                                                      margin: EdgeInsets.only(
+                                                          left: 10),
+                                                      child:
+                                                          SingleChildScrollView(
+                                                        scrollDirection:
+                                                            Axis.vertical,
+                                                        child: Directionality(
+                                                          textDirection:
+                                                              TextDirection.rtl,
+                                                          child: Text(
+                                                            "${state.extraction['data'][index]['title']}",
+                                                            style: TextStyle(
+                                                              color:
+                                                                  Colors.white,
+                                                              fontSize: 15,
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Expanded(
+                                                    flex: 1,
+                                                    child: Container(
+                                                      alignment:
+                                                          Alignment.centerRight,
+                                                      child: Directionality(
+                                                        textDirection:
+                                                            TextDirection.rtl,
+                                                        child: Text(
+                                                          "مقدار: " +
+                                                              "${state.extraction['data'][index]['amount']}" +
+                                                              " ${state.extraction['data'][index]['unit']}" +
+                                                              "",
+                                                          style: TextStyle(
+                                                            fontSize: 15,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ],
+                                              ),
+                                            ),
+                                            Expanded(
+                                                child: Container(
+                                              color: Colors.white,
+                                            )),
+                                            Container(
+                                              alignment: Alignment.centerLeft,
+                                              height: 19,
+                                              margin: EdgeInsets.only(left: 15),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Container(
+                                                    alignment:
+                                                        Alignment.centerLeft,
+                                                    margin: EdgeInsets.only(
+                                                        right: 10),
+                                                    child: Directionality(
+                                                      textDirection:
+                                                          TextDirection.rtl,
+                                                      child: state.extraction[
+                                                                          'data']
+                                                                      [index][
+                                                                  'confirms'] ==
+                                                              null
+                                                          ? Text(
+                                                              "وضعیت: بررسی نشده",
+                                                              style: TextStyle(
+                                                                  color: Colors
+                                                                      .white,
+                                                                  fontSize: 9,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold))
+                                                          : SingleChildScrollView(
+                                                              scrollDirection:
+                                                                  Axis.horizontal,
+                                                              child: Row(
+                                                                children: (state.extraction['data'][index]
+                                                                            [
+                                                                            'confirms']
+                                                                        as List)
+                                                                    .map(
+                                                                        (e) =>
+                                                                            Row(
+                                                                              children: [
+                                                                                Text("وضعیت: ", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                                                                                Text("${e["role"]}:", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                                                                                Text("${e['response']['msg']}", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                                                                                e['is_confirm'] == 1
+                                                                                    ? Container(
+                                                                                        margin: EdgeInsets.only(right: 5),
+                                                                                        child: Icon(
+                                                                                          Icons.thumb_up_alt,
+                                                                                          size: 17,
+                                                                                          color: Colors.green,
+                                                                                        ),
+                                                                                      )
+                                                                                    : Container(margin: EdgeInsets.only(right: 5), child: Icon(Icons.thumb_down_alt, size: 17, color: Colors.red)),
+                                                                              ],
+                                                                            ))
+                                                                    .toList(),
+                                                              ),
+                                                            ),
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                    Container(
+                                      margin:
+                                          EdgeInsets.only(right: 20, top: 20),
+                                      height: 50,
+                                      width: 50,
+                                      padding: EdgeInsets.all(6),
+                                      decoration: BoxDecoration(
+                                          shape: BoxShape.rectangle,
+                                          borderRadius:
+                                              BorderRadius.circular(5),
+                                          color: Colors.white),
+                                      child: Image.asset(
+                                          "assets/images/" +
+                                              '${state.extraction['data'][index]['logo'].toString().toLowerCase()}',
                                           errorBuilder:
                                               (context, error, stackTrace) =>
                                                   Image.asset(
-                                            "assets/images/noimage.png",
-                                            color: Colors.grey,
-                                          ),
-                                        )),
-                                        VerticalDivider(color: Colors.grey),
-                                        Column(
-                                          mainAxisAlignment:
-                                              MainAxisAlignment.spaceBetween,
-                                          children: [
-                                            Text(
-                                                "${state.extraction['data'][index]['title']}"),
-                                            Text(
-                                                "مقدار:    ${state.extraction['data'][index]['amount']}")
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                    Divider(),
-                                    state.extraction['data'][index]
-                                                ['confirms'] ==
-                                            null
-                                        ? Text("تاییدی وجود ندارد")
-                                        : SingleChildScrollView(
-                                            scrollDirection: Axis.horizontal,
-                                            child: Row(
-                                              children: (state.extraction[
-                                                          'data'][index]
-                                                      ['confirms'] as List)
-                                                  .map((e) => Row(
-                                                        children: [
-                                                          e['is_confirm'] == 1
-                                                              ? Icon(
-                                                                  Icons
-                                                                      .thumb_up_alt,
-                                                                  color: Colors
-                                                                      .green)
-                                                              : Icon(
-                                                                  Icons
-                                                                      .thumb_down_alt,
-                                                                  color: Colors
-                                                                      .red),
-                                                          Text("${e["role"]}"),
-                                                          Text(
-                                                              "${e['response']['msg']}"),
-                                                          SizedBox(width: 7)
-                                                        ],
-                                                      ))
-                                                  .toList(),
-                                            ),
-                                          )
+                                                    "assets/images/noimage.png",
+                                                    color: Colors.grey,
+                                                  )),
+                                    )
                                   ],
                                 ),
                               ),
