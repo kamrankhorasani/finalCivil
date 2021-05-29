@@ -92,24 +92,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           //*Map
                           Expanded(
                               child: SimpleLocationPicker(
-                            displayOnly: true,
-                            initialLatitude: state.projects['data'][index]
-                                            ['lat'] ==
-                                        null ||
+                                displayOnly: true,
+                                initialLatitude: state.projects['data'][index]
+                                ['lat'] ==
+                                    null ||
                                     state.projects['data'][index]['lat'] > 90 ||
                                     state.projects['data'][index]['lat'] < -90
-                                ? 36.00
-                                : (state.projects['data'][index]['lat'] as int)
+                                    ? 36.00
+                                    : (state.projects['data'][index]['lat'])
                                     .toDouble(),
-                            initialLongitude: state.projects['data'][index]
-                                            ['lng'] ==
-                                        null ||
+                                initialLongitude: state.projects['data'][index]
+                                ['lng'] ==
+                                    null ||
                                     state.projects['data'][index]['lng'] > 90 ||
                                     state.projects['data'][index]['lng'] < -90
-                                ? 36.00
-                                : (state.projects['data'][index]['lng'] as int)
+                                    ? 36.00
+                                    : (state.projects['data'][index]['lng'])
                                     .toDouble(),
-                          )),
+                              )),
                           Divider(
                             color: Colors.black87,
                           ),

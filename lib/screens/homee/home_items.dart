@@ -23,14 +23,14 @@ class HomeItems extends StatefulWidget {
     ["دستورکار", '/program', Civil.graphic_design],
     ["بازدیدها", '/inspection', Civil.excavator],
     ["اجاره", "/rent", Civil.house],
-    ["استعلام", "/inquiry", Civil.blueprint2],
+    //["استعلام", "/inquiry", Civil.blueprint2],
     ["تصویر و فیلم", '/media', Civil.monitor],
     ["حوادث", '/accident', Civil.brickwall],
     ["چک لیستها", '/checklist', Civil.engineer2],
     ["آب و هوا", '/weather', Civil.wrench],
     ["پرمیت", '/permit', Civil.blueprint2],
     ["جلسات", '/session', Civil.house2],
-    ["پیمانکاران جزء", "/subcontractor", Civil.engineer1]
+    //["پیمانکاران جزء", "/subcontractor", Civil.engineer1]
   ];
 
   @override
