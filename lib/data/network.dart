@@ -63,6 +63,7 @@ class Routing {
     }, route: "provider/type/Get");
   }
 
+
   getProvider({String token}) async {
     return ntk.apiCaller(params: {"token": token}, route: "provider/Get");
   }
