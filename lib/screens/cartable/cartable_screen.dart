@@ -137,6 +137,8 @@ class _CartableScreenState extends State<CartableScreen> {
                                   alignment: Alignment.centerRight,
                                   child: Text(
                                     "${BlocProvider.of<CartableCubit>(context).crt[index]["title"]}",
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: TextStyle(
                                         fontSize: 23,
                                         fontWeight: FontWeight.bold),
@@ -157,7 +159,8 @@ class _CartableScreenState extends State<CartableScreen> {
                                 ),
                                 Expanded(
                                   child: new Container(
-                                      margin: const EdgeInsets.only(left: 10.0, right: 15.0),
+                                      margin: const EdgeInsets.only(
+                                          left: 10.0, right: 15.0),
                                       child: Divider(
                                         color: Colors.black,
                                         height: 1,
@@ -168,7 +171,13 @@ class _CartableScreenState extends State<CartableScreen> {
                                   alignment: Alignment.centerLeft,
                                   margin: EdgeInsets.fromLTRB(15, 0, 5, 5),
                                   width: double.maxFinite,
-                                  child: Text("${persianDate3.toJalaali()} ${BlocProvider.of<CartableCubit>(context).crt[index]["date"].toString().substring(11)}",style: TextStyle(fontSize: 11,fontWeight: FontWeight.w100,color: Colors.white),),
+                                  child: Text(
+                                    "${persianDate3.toJalaali()} ${BlocProvider.of<CartableCubit>(context).crt[index]["date"].toString().substring(11)}",
+                                    style: TextStyle(
+                                        fontSize: 11,
+                                        fontWeight: FontWeight.w100,
+                                        color: Colors.white),
+                                  ),
                                 ),
                               ],
                             ),
@@ -192,16 +201,16 @@ class _CartableScreenState extends State<CartableScreen> {
                                   width: 40,
                                   child: Expanded(
                                       child: Image.asset(
-                                    "assets/images/" +
-                                        BlocProvider.of<CartableCubit>(context)
-                                            .crt[index]["msgType"]
-                                            .toString() +
-                                        ".png",
-                                    errorBuilder:
-                                        (context, error, stackTrace) =>
+                                        "assets/images/" +
+                                            BlocProvider.of<CartableCubit>(context)
+                                                .crt[index]["msgType"]
+                                                .toString() +
+                                            ".png",
+                                        errorBuilder:
+                                            (context, error, stackTrace) =>
                                             Image.asset(
                                                 "assets/images/noimage.png"),
-                                  )),
+                                      )),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.rectangle,
                                       borderRadius: BorderRadius.circular(9)),
