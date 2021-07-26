@@ -14,7 +14,8 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     super.initState();
     BlocProvider.of<HomescreenCubit>(context).getProject(
-      token: BlocProvider.of<LoginCubit>(context).token,
+      token:  BlocProvider.of<LoginCubit>(context).token,
+      //MOBILE_6eafbe7f55369dac8b01ce10bd925a00
     );
   }
 
@@ -55,14 +56,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () async {
                     BlocProvider.of<LoginCubit>(context).projectId =
                         state.projects['data'][index]['id'];
+                    BlocProvider.of<LoginCubit>(context).wbsId =
+                        state.projects['data'][index]['wbs_id'];
                     await BlocProvider.of<LoginCubit>(context).persistProjectId(
                         projectId: state.projects['data'][index]['id']);
+                    await BlocProvider.of<LoginCubit>(context).persistWBSId(
+                        wbsId: state.projects['data'][index]['wbs_id']);
+                    await BlocProvider.of<LoginCubit>(context).settingPanel(
+                        token: BlocProvider.of<LoginCubit>(context).token,
+                        projectId: state.projects['data'][index]['id']);
+                    Navigator.pushReplacementNamed(context, "/mainscreen");
                     // Navigator.popUntil(
                     //     context, ModalRoute.withName("/mainscreen"));
                     // Navigator.pushNamedAndRemoveUntil(
                     //     context, '/mainscreen', (route) => false);
                     //  Navigator.pushNamedAndRemoveUntil(context, '/mainscreen');
-                    Navigator.pushReplacementNamed(context, "/mainscreen");
                   },
                   child: Card(
                     elevation: 10,
@@ -92,24 +100,24 @@ class _HomeScreenState extends State<HomeScreen> {
                           //*Map
                           Expanded(
                               child: SimpleLocationPicker(
-                                displayOnly: true,
-                                initialLatitude: state.projects['data'][index]
-                                ['lat'] ==
-                                    null ||
+                            displayOnly: true,
+                            initialLatitude: state.projects['data'][index]
+                                            ['lat'] ==
+                                        null ||
                                     state.projects['data'][index]['lat'] > 90 ||
                                     state.projects['data'][index]['lat'] < -90
-                                    ? 36.00
-                                    : (state.projects['data'][index]['lat'])
+                                ? 36.00
+                                : (state.projects['data'][index]['lat'])
                                     .toDouble(),
-                                initialLongitude: state.projects['data'][index]
-                                ['lng'] ==
-                                    null ||
+                            initialLongitude: state.projects['data'][index]
+                                            ['lng'] ==
+                                        null ||
                                     state.projects['data'][index]['lng'] > 90 ||
                                     state.projects['data'][index]['lng'] < -90
-                                    ? 36.00
-                                    : (state.projects['data'][index]['lng'])
+                                ? 36.00
+                                : (state.projects['data'][index]['lng'])
                                     .toDouble(),
-                              )),
+                          )),
                           Divider(
                             color: Colors.black87,
                           ),

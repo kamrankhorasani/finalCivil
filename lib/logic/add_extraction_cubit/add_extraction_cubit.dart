@@ -1,3 +1,5 @@
+
+
 import 'package:bloc/bloc.dart';
 import 'package:civil_project/data/network.dart';
 import 'package:civil_project/screens/homee/home_items.dart';
@@ -14,13 +16,17 @@ class AddExtractionCubit extends Cubit<AddExtractionState> {
     try {
       final body = await Routing()
           .getStorageItemProperty(token: token, itemType: "MASALEH");
+
       final body2 = await Routing().getMaterial(
         token: token,
         projectId: projectid,
         activityId: activityId,
         dateIn: globalDateController.text,
       );
-      emit(LoadedMaterials(body, body2));
+
+      final body3 = await Routing().getFehrest(token, activityId);
+
+      emit(LoadedMaterials(body, body2,body3));
     } catch (e) {
       print(e.toString());
       emit(FailedLoadingMaterials());
@@ -33,8 +39,8 @@ class AddExtractionCubit extends Cubit<AddExtractionState> {
       int itemId,
       int activityId,
       String info,
-      String amount,
-      String type}) async {
+      String amount
+     ,String fehrestCode}) async {
     emit(AddingExtraction());
     try {
       final body = await Routing().storageExtract(
@@ -43,6 +49,8 @@ class AddExtractionCubit extends Cubit<AddExtractionState> {
           activityId: activityId,
           dateIn: globalDateController.text,
           itemId: itemId,
+          fehrestCode: fehrestCode,
+          info: info,
           amount: amount);
       print(body);
       emit(ExtractionAdded(body['success']));
@@ -50,7 +58,7 @@ class AddExtractionCubit extends Cubit<AddExtractionState> {
           token: token,
           projectid: projectId,
           activityId: activityId,
-          type: type);
+          );
     } catch (e) {
       emit(AddingExtractionFailed());
     }
@@ -87,6 +95,7 @@ class AddExtractionCubit extends Cubit<AddExtractionState> {
       int stockId,
       String description,
       String amount,
+      String fehrestCode,
       String type}) async {
     emit(UpdatingExtraction());
     try {
@@ -94,6 +103,7 @@ class AddExtractionCubit extends Cubit<AddExtractionState> {
           token: token,
           itemId: itemId,
           stockId: stockId,
+          fehrestCode: fehrestCode,
           description: description,
           amount: amount);
       print(body);

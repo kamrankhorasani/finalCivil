@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:bloc/bloc.dart';
 import 'package:civil_project/data/network.dart';
 import 'package:equatable/equatable.dart';
@@ -17,6 +19,8 @@ class FinancialCubit extends Cubit<FinancialState> {
       ) as Map;
       print(body);
       emit(LoadedTransactions(body));
+    } on TimeoutException {
+      print("Time out Exception");
     } catch (e) {
       print(e);
     }

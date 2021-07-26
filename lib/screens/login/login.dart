@@ -69,7 +69,7 @@ class _LoginScreenState extends State<LoginScreen> {
             Center(
               child: Container(
                 padding: EdgeInsets.only(right: width * 0.02),
-                height: height * 0.1,
+                height: height * 0.08,
                 child: Directionality(
                   textDirection: TextDirection.rtl,
                   child: TextField(
@@ -80,6 +80,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     keyboardType: TextInputType.phone,
                     maxLines: 1,
                     decoration: InputDecoration(
+                      
                       border: InputBorder.none,
                       hintText: "شماره خود را وارد کنید...",
                     ),

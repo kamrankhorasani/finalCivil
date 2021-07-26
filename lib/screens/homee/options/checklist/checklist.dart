@@ -9,8 +9,7 @@ class CheckList extends StatefulWidget {
 }
 
 class _CheckListState extends State<CheckList> {
-  List items = [];
-  List<bool> isCheckedList = [];
+  List<Map<String, dynamic>> finalCheckedList = [];
   @override
   void initState() {
     super.initState();
@@ -23,21 +22,41 @@ class _CheckListState extends State<CheckList> {
   @override
   Widget build(BuildContext context) {
     final height = MediaQuery.of(context).size.height;
-
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: RaisedButton(
-          padding: EdgeInsets.symmetric(
-              horizontal: height * 0.2, vertical: height * 0.02),
-          child: Text("ثبت"),
-          onPressed: () async {
-            await BlocProvider.of<ChecklistCubit>(context).updatingChecklist(
-                token: BlocProvider.of<LoginCubit>(context).token,
-                activityId: BlocProvider.of<LoginCubit>(context).activityId,
-                items: items);
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: BlocBuilder<ChecklistCubit, ChecklistState>(
+          builder: (context, state) {
+            if (state is LoadedChecklist) {
+              for (var item in state.checklists['data']) {
+                (item["items"] as List).forEach((element) {
+                  finalCheckedList.add({
+                    "item_id": element["checklist_item_id"],
+                    "is_checked": element["is_checked"]==true?1:0
+                  });
+                });
+              }
+              return RaisedButton(
+                  padding: EdgeInsets.symmetric(
+                      horizontal: height * 0.2, vertical: height * 0.02),
+                  child: Text("ثبت"),
+                  onPressed: () async {
+                    await BlocProvider.of<ChecklistCubit>(context)
+                        .updatingChecklist(
+                            token: BlocProvider.of<LoginCubit>(context).token,
+                            activityId:
+                                BlocProvider.of<LoginCubit>(context).activityId,
+                            items: finalCheckedList);
+                  },
+                  color: Colors.green,
+                  textColor: Colors.white);
+            } else {
+              return Container();
+            }
           },
-          color: Colors.green,
-          textColor: Colors.white),
+        ),
+      ),
       appBar: AppBar(
         title: Text("چک لیست"),
       ),
@@ -46,12 +65,19 @@ class _CheckListState extends State<CheckList> {
           if (state is AddingChecklist) {
             Scaffold.of(context)
               ..removeCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text("در حال ثبت")));
+              ..showSnackBar(SnackBar(
+                  content: Text("در حال ثبت", textAlign: TextAlign.right)));
           }
           if (state is AddedChecklist) {
             Scaffold.of(context)
               ..removeCurrentSnackBar()
-              ..showSnackBar(SnackBar(content: Text("ثبت شد")));
+              ..showSnackBar(SnackBar(
+                  content: Text(
+                "ثبت شد",
+                textAlign: TextAlign.right,
+              )));
+
+            finalCheckedList = [];
           }
         },
         builder: (context, state) {
@@ -59,89 +85,81 @@ class _CheckListState extends State<CheckList> {
             return Center(child: CircularProgressIndicator());
           }
           if (state is LoadedChecklist) {
-            if (state.checklists['data'] == null) {
+            if (state.checklists['data'] == null ||
+                (state.checklists['data'] as List).isEmpty) {
               return Center(child: Text("چیزی برای نمایش وجود ندارد"));
             } else {
-              return ListView.separated(
-                separatorBuilder: (context, index) => Divider(),
-                itemCount: (state.checklists['data'] as List).length,
-                itemBuilder: (context, index) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Card(
-                      child: Column(
-                        textDirection: TextDirection.rtl,
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        crossAxisAlignment: CrossAxisAlignment.stretch,
-                        children: [
-                          Row(
-                            textDirection: TextDirection.rtl,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Padding(
-                                padding: EdgeInsets.all(8.0),
-                                child: Text(
-                                    "${state.checklists['data'][index]['title']}"),
-                              ),
-                            ],
+              return Column(
+                children: [
+                  Expanded(
+                    child: ListView.separated(
+                      physics: BouncingScrollPhysics(),
+                      separatorBuilder: (context, index) => Divider(),
+                      itemCount: (state.checklists['data'] as List).length,
+                      itemBuilder: (context, index) {
+                        return Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Card(
+                            child: Column(
+                              textDirection: TextDirection.rtl,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                Row(
+                                  textDirection: TextDirection.rtl,
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Padding(
+                                      padding: EdgeInsets.all(8.0),
+                                      child: Text(
+                                          "${state.checklists['data'][index]['title']}"),
+                                    ),
+                                  ],
+                                ),
+                                Divider(),
+                                state.checklists['data'][index]['items'] == null
+                                    ? Center(child: Text("آیتمی وجود ندارد"))
+                                    : SizedBox(
+                                        height: height * 0.2,
+                                        child: ListView.separated(
+                                            itemBuilder: (context, indx) {
+                                              return CheckboxListTile(
+                                                title: Text(
+                                                    state.checklists['data']
+                                                            [index]['items']
+                                                        [indx]['title']),
+                                                value: state.checklists['data']
+                                                        [index]['items'][indx]
+                                                    ['is_checked'],
+                                                selected:
+                                                    state.checklists['data']
+                                                            [index]['items']
+                                                        [indx]['is_checked'],
+                                                onChanged: (value) {
+                                                  setState(() {
+                                                    state.checklists['data']
+                                                                [index]['items']
+                                                            [indx]
+                                                        ['is_checked'] = value;
+                                                  });
+                                                },
+                                              );
+                                            },
+                                            separatorBuilder: (context, indx) =>
+                                                SizedBox(),
+                                            itemCount: (state.checklists['data']
+                                                    [index]['items'] as List)
+                                                .length)),
+                              ],
+                            ),
                           ),
-                          Divider(),
-                          state.checklists['data'][index]['items'] == null
-                              ? Center(child: Text("آیتمی وجود ندارد"))
-                              : SizedBox(
-                                  height: height * 0.2,
-                                  child: ListView.separated(
-                                      itemBuilder: (context, indx) {
-                                        (state.checklists['data'][index]
-                                                ['items'] as List)
-                                            .forEach((e) {
-                                          if (e["is_checked"] == 0) {
-                                            isCheckedList.add(false);
-                                          }
-                                          if (e["is_checked"] == 1) {
-                                            isCheckedList.add(true);
-                                          }
-                                        });
-
-                                        return CheckboxListTile(
-                                          title: Text(state.checklists['data']
-                                              [index]['items'][indx]['title']),
-                                          value: isCheckedList[indx],
-                                          selected: isCheckedList[indx],
-                                          onChanged: (value) {
-                                            setState(() {
-                                              isCheckedList[indx] = value;
-                                            });
-                                            if (isCheckedList[indx] == false) {
-                                              items.add({
-                                                "item_id": state
-                                                            .checklists['data']
-                                                        [index]['items'][indx]
-                                                    ["checklist_item_id"],
-                                                "is_checked": 0
-                                              });
-                                            } else {
-                                              items.add({
-                                                "item_id": state
-                                                            .checklists['data']
-                                                        [index]['items'][indx]
-                                                    ["checklist_item_id"],
-                                                "is_checked": 1
-                                              });
-                                            }
-                                          },
-                                        );
-                                      },
-                                      separatorBuilder: (context, indx) =>
-                                          SizedBox(),
-                                      itemCount: (state.checklists['data']
-                                              [index]['items'] as List)
-                                          .length)),
-                        ],
-                      ),
+                        );
+                      },
                     ),
-                  );
-                },
+                  ),
+                  SizedBox(height: height * 0.1),
+                ],
               );
             }
           }

@@ -9,4 +9,6 @@ class ConfigurCubit extends Cubit<ConfigurState> {
   int providerId;
   List users;
   activityTitleset(String str) => emit(ConfigurInitial(str));
+
+  
 }

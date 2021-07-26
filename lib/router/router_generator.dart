@@ -19,7 +19,6 @@ import 'package:civil_project/logic/media_cubit/media_cubit.dart';
 import 'package:civil_project/logic/payment_cubit/payment_cubit.dart';
 import 'package:civil_project/logic/permit_cubit/permit_cubit.dart';
 import 'package:civil_project/logic/program_cubit/program_cubit.dart';
-import 'package:civil_project/logic/rent_cubit/rent_cubit.dart';
 import 'package:civil_project/logic/session_cubit/session_cubit.dart';
 import 'package:civil_project/logic/weather_cubit/weather_cubit.dart';
 import 'package:civil_project/logic/worker_cubit/worker_cubit.dart';
@@ -41,7 +40,6 @@ import 'package:civil_project/screens/homee/options/media/media.dart';
 import 'package:civil_project/screens/homee/options/payment/payment.dart';
 import 'package:civil_project/screens/homee/options/permit/permit.dart';
 import 'package:civil_project/screens/homee/options/programs/programs.dart';
-import 'package:civil_project/screens/homee/options/rent/rent.dart';
 import 'package:civil_project/screens/homee/options/session/sessions.dart';
 import 'package:civil_project/screens/homee/options/subcontractor/subcontractor.dart';
 import 'package:civil_project/screens/homee/options/weather/weather.dart';
@@ -191,11 +189,11 @@ class AppRouter {
                 create: (context) => SessionCubit(), child: Session()));
         break;
 
-      case "/rent":
-        return MaterialPageRoute(
-            builder: (_) =>
-                BlocProvider(create: (context) => RentCubit(), child: Rent()));
-        break;
+      // case "/rent":
+      //   return MaterialPageRoute(
+      //       builder: (_) =>
+      //           BlocProvider(create: (context) => RentCubit(), child: Rent()));
+      //   break;
 
       case '/weather':
         return MaterialPageRoute(
@@ -214,8 +212,8 @@ class AppRouter {
         break;
       case '/alarm':
         return MaterialPageRoute(
-            builder: (_) => BlocProvider(
-                  create: (context) => AlarmsCubit(),
+            builder: (_) => BlocProvider.value(
+                  value: AlarmsCubit(),
                   child: AlarmScreen(),
                 ));
         break;

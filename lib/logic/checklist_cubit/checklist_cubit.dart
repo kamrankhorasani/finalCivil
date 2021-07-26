@@ -6,13 +6,22 @@ part 'checklist_state.dart';
 
 class ChecklistCubit extends Cubit<ChecklistState> {
   ChecklistCubit() : super(ChecklistInitial());
-
+  List edittedList = [];
   Future gettingChecklist({String token, int activityId}) async {
     emit(LoadingChecklist());
     try {
       final body =
           await Routing().getCheckList(token: token, activityId: activityId);
       print(body);
+      for (var item in body['data'] as List) {
+        item["items"].forEach((element) {
+          if (element['is_checked'] == 1) {
+            element["is_checked"] = true;
+          } else {
+            element["is_checked"] = false;
+          }
+        });
+      }
       emit(LoadedChecklist(body));
     } catch (e) {
       print(e.toString());

@@ -9,17 +9,17 @@ abstract class MachinaryState extends Equatable {
 
 class MachinaryInitial extends MachinaryState {}
 
-
 class LoadingMachinary extends MachinaryState {}
+
 class LoadedMachinary extends MachinaryState {
   final Map machines;
   final Map storageMachinarys;
+  final Map fehrest;
 
-  LoadedMachinary(this.machines, this.storageMachinarys);
+  LoadedMachinary(this.machines, this.storageMachinarys, this.fehrest);
 }
 
 class FailedLoadingMachinary extends MachinaryState {}
-
 
 class AddingMachinary extends MachinaryState {}
 
@@ -50,3 +50,11 @@ class UpdatedMachinary extends MachinaryState {
 }
 
 class FailedUpdatingMachinary extends MachinaryState {}
+class SearchingMachine extends MachinaryState {}
+class SearchedMachine extends MachinaryState {
+  final List searchedItems;
+
+  SearchedMachine(this.searchedItems);
+}
+
+class FailedSearchingMachine extends MachinaryState {}

@@ -30,6 +30,7 @@ class _MyAppState extends State<MyApp> {
 
     BlocProvider.of<LoginCubit>(context).loadToken();
     BlocProvider.of<LoginCubit>(context).loadProjectId();
+    BlocProvider.of<LoginCubit>(context).loadWBSId();
   }
 
   final AppRouter _approute = AppRouter();

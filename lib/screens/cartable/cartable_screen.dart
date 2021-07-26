@@ -1,6 +1,4 @@
-import 'dart:ffi';
 
-import 'package:civil_project/constants/constantdecorations.dart';
 import 'package:civil_project/logic/cartable_cubit/cartable_cubit.dart';
 import 'package:civil_project/logic/login_cubit/login_cubit.dart';
 import 'package:flutter/cupertino.dart';
@@ -42,7 +40,8 @@ class _CartableScreenState extends State<CartableScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final height = MediaQuery.of(context).size.height;
+      final width = MediaQuery.of(context).size.width;
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
           onPressed: () => Navigator.pushNamed(context, '/addcartable').then(
@@ -145,7 +144,7 @@ class _CartableScreenState extends State<CartableScreen> {
                                   ),
                                 ),
                                 new Container(
-                                  height: 290,
+                                  height:width*0.7 ,
                                   width: double.maxFinite,
                                   alignment: Alignment.topRight,
                                   margin: EdgeInsets.fromLTRB(15, 15, 15, 0),
@@ -153,21 +152,12 @@ class _CartableScreenState extends State<CartableScreen> {
                                     textDirection: TextDirection.rtl,
                                     child: Text(
                                       "${BlocProvider.of<CartableCubit>(context).crt[index]["from_user"]}",
-                                      style: TextStyle(),
                                     ),
                                   ),
                                 ),
-                                Expanded(
-                                  child: new Container(
-                                      margin: const EdgeInsets.only(
-                                          left: 10.0, right: 15.0),
-                                      child: Divider(
-                                        color: Colors.black,
-                                        height: 1,
-                                      )),
-                                ),
+                              Divider(),
                                 new Container(
-                                  height: 24,
+                                  height: width*0.05,
                                   alignment: Alignment.centerLeft,
                                   margin: EdgeInsets.fromLTRB(15, 0, 5, 5),
                                   width: double.maxFinite,
@@ -199,18 +189,17 @@ class _CartableScreenState extends State<CartableScreen> {
                                 Container(
                                   height: 40,
                                   width: 40,
-                                  child: Expanded(
-                                      child: Image.asset(
-                                        "assets/images/" +
-                                            BlocProvider.of<CartableCubit>(context)
-                                                .crt[index]["msgType"]
-                                                .toString() +
-                                            ".png",
-                                        errorBuilder:
-                                            (context, error, stackTrace) =>
-                                            Image.asset(
-                                                "assets/images/noimage.png"),
-                                      )),
+                                  child: Image.asset(
+                                    "assets/images/" +
+                                        BlocProvider.of<CartableCubit>(context)
+                                            .crt[index]["msgType"]
+                                            .toString() +
+                                        ".png",
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                        Image.asset(
+                                            "assets/images/noimage.png"),
+                                  ),
                                   decoration: BoxDecoration(
                                       shape: BoxShape.rectangle,
                                       borderRadius: BorderRadius.circular(9)),

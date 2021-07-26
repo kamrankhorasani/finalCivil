@@ -12,9 +12,10 @@ class ActivityInitial extends ActivityState {}
 class LoadingActivity extends ActivityState {}
 
 class LoadedActivity extends ActivityState {
-  final Map activitiesList;
+  final int percent;
+  final String description;
 
-  LoadedActivity(this.activitiesList);
+  LoadedActivity(this.percent, this.description);
 }
 
 class LoadingFailedActivty extends ActivityState {}

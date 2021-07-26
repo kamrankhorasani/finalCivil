@@ -9,11 +9,8 @@ import '../../civil_icons.dart';
 
 class FeedScreen extends StatefulWidget {
   static const List<List> titleText = [
-    [
-      "کارکرد نیروها",
-      'worker',
-      Civil.engineer,
-    ],
+    ["تصویر و فیلم", "media", Civil.monitor],
+    ["کارکرد نیروها", 'worker', Civil.engineer],
     ["مصالح مصرفی", "masaleh", Civil.crane],
     ["ماشین آلات مصرفی", "tajhizat", Civil.crane1],
     ["فعالیتها", "works", Civil.blueprint3],
@@ -28,11 +25,10 @@ class FeedScreen extends StatefulWidget {
     ["قرارداد", "contractor", Civil.engineer1],
     ["انبار خروجی", "anbar_out", Civil.house],
     ["هزینه", "cost", Civil.helmet],
-   // ["تصویر و فیلم", "media", Civil.monitor],
     ["مالی ورودی", "mali_in", Civil.tools],
     ["مالی خروجی", "mali_out", Civil.paintroller],
-    ["صورت وضعیت", "soorat_vaziat", Civil.engineer],
     ["تعدیل", "tadil", Civil.worker]
+    //["صورت وضعیت", "soorat_vaziat", Civil.engineer],
   ];
   @override
   _FeedScreenState createState() => _FeedScreenState();
@@ -44,9 +40,9 @@ class _FeedScreenState extends State<FeedScreen> {
   PersianDatePickerWidget fromDatePicker;
   PersianDatePickerWidget toDatePicker;
   List _activities = [];
+  List tempActives = [];
   String activityList = "";
   int choice;
-  String choiceName;
   @override
   void initState() {
     super.initState();
@@ -90,7 +86,7 @@ class _FeedScreenState extends State<FeedScreen> {
     final height = MediaQuery.of(context).size.height;
     return Scaffold(
       appBar: AppBar(
-        title: Text("Civil"),
+        title: Text("گزاراشات", style: TextStyle(fontWeight: FontWeight.bold)),
         centerTitle: true,
       ),
       body: SingleChildScrollView(
@@ -111,7 +107,6 @@ class _FeedScreenState extends State<FeedScreen> {
                     textDirection: TextDirection.rtl,
                     // mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Text(":فعالیتها"),
                       Expanded(
                           child: Directionality(
                         textDirection: TextDirection.rtl,
@@ -121,26 +116,33 @@ class _FeedScreenState extends State<FeedScreen> {
                             builder: (context, state) {
                               if (state is LoadedFeedActivity) {
                                 return DropdownButton(
-
                                     underline: Container(),
-                                    hint: Text(":فعالیتها"),
+                                    hint: Text("فعالیتها"),
                                     isExpanded: true,
                                     value: choice,
-                                    items: (state.activityList['data'] as List??[])
-                                        .map((e) => DropdownMenuItem(
-                                              child: Center(
-                                                  child: Text(e['title'])),
-                                              value: e['id'],
-                                            ))
-                                        .toList(),
+                                    items:
+                                        (state.activityList['data'] as List ??
+                                                [])
+                                            .map((e) => DropdownMenuItem(
+                                                  child: Center(
+                                                      child: Text(e['title'])),
+                                                  value: e['id'],
+                                                ))
+                                            .toList(),
                                     onChanged: (value) {
                                       setState(() {
                                         choice = value;
-                                        _activities.add(value);
-                                        activityList = activityList +
-                                            "," +
-                                            value.toString();
+                                        tempActives.add(value);
+                                        (state.activityList['data'] as List)
+                                            .forEach((element) {
+                                          if (element['id'] == value) {
+                                            _activities.add(element['title']);
+                                          }
+                                        });
                                       });
+
+                                      activityList =
+                                          activityList + "," + value.toString();
                                     });
                               }
                               return Container();
@@ -161,6 +163,13 @@ class _FeedScreenState extends State<FeedScreen> {
                                 setState(() {
                                   _activities.removeAt(index);
                                 });
+                                String temp;
+                                tempActives.removeAt(index);
+                                activityList = null;
+                                temp = tempActives.toString();
+                                activityList = temp.substring(
+                                    0, temp.length-1);
+
                               },
                               deleteIcon: Icon(Icons.cancel),
                               deleteIconColor: Colors.red,
@@ -230,9 +239,15 @@ class _FeedScreenState extends State<FeedScreen> {
                     onTap: () {
                       Navigator.pushNamed(context, "/feeddetail", arguments: {
                         "tbl": FeedScreen.titleText[index][1],
-                        "activityList": activityList.substring(1),
+                        "activityList": activityList.substring(1,activityList.length),
                         "fromDate": _startDate.text,
                         "toDate": _endDate.text
+                      }).then((value) {
+                        setState(() {
+                          // _activities = [];
+                          // activityList = "";
+                          choice = null;
+                        });
                       });
                     },
                     child: Column(

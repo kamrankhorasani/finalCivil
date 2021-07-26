@@ -4,12 +4,15 @@ import 'package:civil_project/shared/persistance.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../data/network.dart';
 part 'login_state.dart';
 
 class LoginCubit extends Cubit<LoginState> {
   LoginCubit() : super(LoginInitial());
   int activityId;
   int projectId;
+  int wbsId;
   String activityTitle;
   String token;
 
@@ -19,6 +22,10 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> persistProjectId({@required int projectId}) async {
     await PersistData().saveProjectId(data: projectId);
+  }
+
+  Future<void> persistWBSId({@required int wbsId}) async {
+    await PersistData().saveWBSId(data: wbsId ?? 0);
   }
 
   Future<void> persistActivityId({@required int activityId}) async {
@@ -31,7 +38,13 @@ class LoginCubit extends Cubit<LoginState> {
 
   Future<void> loadToken() async {
     final SharedPreferences pref = await SharedPreferences.getInstance();
-    token = pref.getString("token");
+     token = pref.getString("token");
+    //token = "MOBILE_6eafbe7f55369dac8b01ce10bd925a00";
+  }
+
+  Future loadWBSId() async {
+    final SharedPreferences pref = await SharedPreferences.getInstance();
+    wbsId = pref.getInt("wbsId");
   }
 
   Future<void> loadProjectId() async {
@@ -40,14 +53,6 @@ class LoginCubit extends Cubit<LoginState> {
     projectId = pref.getInt("projectId");
     emit(FileLoaded(projectId));
   }
-
-  // loadActivityId() async {
-  //   activityId = await LoadData().loadingActivityIdData();
-  // }
-
-  // loadActivityTitle() async {
-  //   activityTitle = await LoadData().loadingActivityTitleData();
-  // }
 
   Future login({@required String mobile}) async {
     try {
@@ -67,5 +72,10 @@ class LoginCubit extends Cubit<LoginState> {
     } catch (e) {
       emit(WrongCode(error: e.toString()));
     }
+  }
+
+  Future settingPanel({String token, int projectId}) async {
+    final body = Routing().setPanel(token, projectId);
+    print(body);
   }
 }

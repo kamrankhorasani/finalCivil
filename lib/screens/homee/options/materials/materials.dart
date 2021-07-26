@@ -11,16 +11,21 @@ class MaterialDialog extends StatefulWidget {
   final String description;
   final int choose;
   final int itemId;
-  final bool addOrupdate;
+  final bool isUpdate;
+  final int stockId;
+  final String fehrestCode;
+
   final String type;
 
   MaterialDialog(
       {this.amounT,
+      this.fehrestCode,
       this.description,
       this.type,
       this.choose,
       this.itemId,
-      this.addOrupdate});
+      this.stockId,
+      this.isUpdate});
   @override
   _MaterialDialogState createState() => _MaterialDialogState();
 }
@@ -29,6 +34,7 @@ class _MaterialDialogState extends State<MaterialDialog> {
   final TextEditingController _amount = TextEditingController();
   final TextEditingController _descript = TextEditingController();
   int choiceMaterial;
+  String fehrestCode;
   @override
   void dispose() {
     super.dispose();
@@ -39,10 +45,12 @@ class _MaterialDialogState extends State<MaterialDialog> {
   @override
   void initState() {
     super.initState();
-    if (widget.addOrupdate == true) {
+    if (widget.isUpdate == true) {
       _amount.text = widget.amounT;
       _descript.text = widget.description;
-      choiceMaterial = widget.choose;
+      choiceMaterial = widget.stockId;
+      fehrestCode = widget.fehrestCode;
+
     }
   }
 
@@ -60,7 +68,6 @@ class _MaterialDialogState extends State<MaterialDialog> {
             children: [
               Container(
                 decoration: containerShadow,
-                padding: EdgeInsets.symmetric(horizontal: width * 0.02),
                 margin: EdgeInsets.all(width * 0.02),
                 child: BlocBuilder<AddExtractionCubit, AddExtractionState>(
                   builder: (context, state) {
@@ -70,6 +77,7 @@ class _MaterialDialogState extends State<MaterialDialog> {
                     if (state is LoadedMaterials) {
                       return DropdownButtonHideUnderline(
                         child: DropdownButton(
+                          isExpanded: true,
                           disabledHint: Text("نوع"),
                           value: choiceMaterial,
                           underline: Divider(
@@ -78,7 +86,14 @@ class _MaterialDialogState extends State<MaterialDialog> {
                           hint: Text("نوع"),
                           items: (state.materials['data']['items'] as List)
                               .map((e) => DropdownMenuItem(
-                                    child: Text(e['title']),
+                                    child: Padding(
+                                      padding: EdgeInsets.symmetric(
+                                          vertical: width * 0.01),
+                                      child: Text(
+                                        e['title'],
+                                        textDirection: TextDirection.rtl,
+                                      ),
+                                    ),
                                     value: e['id'],
                                   ))
                               .toList(),
@@ -91,6 +106,45 @@ class _MaterialDialogState extends State<MaterialDialog> {
                       );
                     }
                     return Container();
+                  },
+                ),
+              ),
+              Container(
+                decoration: containerShadow,
+                padding: EdgeInsets.symmetric(horizontal: width * 0.02),
+                margin: EdgeInsets.all(width * 0.02),
+                child: BlocBuilder<AddExtractionCubit, AddExtractionState>(
+                  builder: (context, state) {
+                    if (state is LoadingMaterials) {
+                      return Center(child: CircularProgressIndicator());
+                    }
+                    if (state is LoadedMaterials) {
+                      return DropdownButtonHideUnderline(
+                        child: DropdownButton(
+                          isExpanded: true,
+                          disabledHint: Text("فهرست بها"),
+                          value: fehrestCode,
+                          hint: Padding(
+                            padding: EdgeInsets.only(right: 8.0),
+                            child: Text("فهرست بها"),
+                          ),
+                          items: (state.fehrest['data'] as List ?? [])
+                              .map((e) => DropdownMenuItem(
+                                    child: Text(e['title']),
+                                    value: e['code'],
+                                  ))
+                              .toList(),
+                          onChanged: (value) {
+                            setState(() {
+                              fehrestCode = value;
+                            });
+                          },
+                        ),
+                      );
+                    }
+                    return Container(
+                      child: Text(""),
+                    );
                   },
                 ),
               ),
@@ -111,6 +165,7 @@ class _MaterialDialogState extends State<MaterialDialog> {
                       choiceMaterial = null;
                     });
                     Navigator.pop(context);
+
                   }
                 },
                 child: SizedBox(
@@ -140,37 +195,32 @@ class _MaterialDialogState extends State<MaterialDialog> {
                     horizontal: width * 0.01, vertical: height * 0.05),
                 child: RaisedButton(
                   onPressed: () async {
-                    if (widget.addOrupdate == false) {
+                    if (widget.isUpdate == false) {
                       await BlocProvider.of<AddExtractionCubit>(context)
-                          .addExtraction(   token:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .token,
-                                      projectId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .projectId,
-                                      activityId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .activityId,
+                          .addExtraction(
+                              token: BlocProvider.of<LoginCubit>(context).token,
+                              projectId: BlocProvider.of<LoginCubit>(context)
+                                  .projectId,
+                              activityId: BlocProvider.of<LoginCubit>(context)
+                                  .activityId,
                               amount: _amount.text,
                               itemId: choiceMaterial,
                               info: _descript.text,
-                              type: widget.type);
+                              fehrestCode: fehrestCode);
                     }
-                    if (widget.addOrupdate == true) {
+                    if (widget.isUpdate == true) {
                       await BlocProvider.of<AddExtractionCubit>(context)
-                          .updatingExtraction(   token:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .token,
-                                      projectId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .projectId,
-                                      activityId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .activityId,
+                          .updatingExtraction(
+                              token: BlocProvider.of<LoginCubit>(context).token,
+                              projectId: BlocProvider.of<LoginCubit>(context)
+                                  .projectId,
+                              activityId: BlocProvider.of<LoginCubit>(context)
+                                  .activityId,
                               amount: _amount.text,
-                              itemId: choiceMaterial,
+                              itemId: widget.itemId,
                               description: _descript.text,
-                              type: widget.type);
+                              stockId: choiceMaterial,
+                              fehrestCode: fehrestCode);
                     }
                   },
                   child: Text("ثبت", style: TextStyle(color: Colors.white)),
@@ -197,15 +247,11 @@ class _MaterialsState extends State<Materials> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<AddExtractionCubit>(context).getMaterilas(   token:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .token,
-                                      projectid:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .projectId,
-                                      activityId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .activityId,);
+    BlocProvider.of<AddExtractionCubit>(context).getMaterilas(
+      token: BlocProvider.of<LoginCubit>(context).token,
+      projectid: BlocProvider.of<LoginCubit>(context).projectId,
+      activityId: BlocProvider.of<LoginCubit>(context).activityId,
+    );
   }
 
   @override
@@ -223,7 +269,7 @@ class _MaterialsState extends State<Materials> {
             builder: (_) => BlocProvider.value(
               value: context.read<AddExtractionCubit>(),
               child: MaterialDialog(
-                addOrupdate: false,
+                isUpdate: false,
               ),
             ),
           );
@@ -279,7 +325,7 @@ class _MaterialsState extends State<Materials> {
                       Scaffold.of(context)
                         ..removeCurrentSnackBar()
                         ..showSnackBar(
-                            SnackBar(content: Text("متاسفانه بروز نشد")));
+                            SnackBar(content: Text("متاسفانه بعلت کمبود موجودی بروز نشد")));
                     } else {
                       Scaffold.of(context)
                         ..removeCurrentSnackBar()
@@ -350,7 +396,7 @@ class _MaterialsState extends State<Materials> {
                                           textDirection: TextDirection.rtl,
                                           children: [
                                             Text(
-                                              "${state.storageExtractions['data'][index]['title'] ?? "بدون عنوان"}  مقدار: ${state.storageExtractions['data'][index]['amount'] ?? ""}",
+                                              "${state.storageExtractions['data'][index]['title'] ?? "بدون عنوان"}  مقدار: ${state.storageExtractions['data'][index]['amount'] ?? 0}",
                                               overflow: TextOverflow.fade,
                                             ),
                                           ],
@@ -446,15 +492,19 @@ class _MaterialsState extends State<Materials> {
                                                           await BlocProvider.of<
                                                                       AddExtractionCubit>(
                                                                   context)
-                                                              .deletingExtraction(   token:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .token,
-                                      projectId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .projectId,
-                                      activityId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .activityId,
+                                                              .deletingExtraction(
+                                                            token: BlocProvider
+                                                                    .of<LoginCubit>(
+                                                                        context)
+                                                                .token,
+                                                            projectId: BlocProvider
+                                                                    .of<LoginCubit>(
+                                                                        context)
+                                                                .projectId,
+                                                            activityId: BlocProvider
+                                                                    .of<LoginCubit>(
+                                                                        context)
+                                                                .activityId,
                                                             itemId:
                                                                 state.storageExtractions[
                                                                         'data'][
@@ -487,7 +537,7 @@ class _MaterialsState extends State<Materials> {
                                                     value: context.read<
                                                         AddExtractionCubit>(),
                                                     child: MaterialDialog(
-                                                      addOrupdate: true,
+                                                      isUpdate: true,
                                                       itemId: state
                                                               .storageExtractions[
                                                           'data'][index]['id'],
@@ -496,6 +546,13 @@ class _MaterialsState extends State<Materials> {
                                                               'data'][index]
                                                               ['amount']
                                                           .toString(),
+                                                      description: state
+                                                              .storageExtractions[
+                                                          'data'][index]['info'],
+                                                      stockId:
+                                                          state.storageExtractions[
+                                                                  'data'][index]
+                                                              ['stockId'],
                                                     ),
                                                   ));
                                         },
@@ -512,7 +569,7 @@ class _MaterialsState extends State<Materials> {
                   );
                 }
               }
-              return Text("چیزی برای نمایش وجود ندارد");
+              return Center(child: Text("چیزی برای نمایش وجود ندارد"));
             },
           ),
         ],

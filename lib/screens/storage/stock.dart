@@ -19,8 +19,8 @@ class _StorageStockState extends State<StorageStock> {
 
   @override
   Widget build(BuildContext context) {
-    final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+     final width = MediaQuery.of(context).size.width;
+    // final height = MediaQuery.of(context).size.height;
     return Scaffold(
       body: BlocConsumer<StorageGetStockCubit, StoreagestockState>(
         listener: (context, state) {
@@ -56,16 +56,13 @@ class _StorageStockState extends State<StorageStock> {
                               Container(
                                 alignment: Alignment.topRight,
                                 margin: EdgeInsets.only(right: 30, top: 30, left: 10),
-                                child: Expanded(
-                                  flex: 2,
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.vertical,
-                                    child: Directionality(
-                                      textDirection: TextDirection.rtl,
-                                      child: Text(
-                                        '${state.stock['data'][index]['title']}',
-                                        style: TextStyle(color: Colors.white, fontSize: 15),
-                                      ),
+                                child: SingleChildScrollView(
+                                  scrollDirection: Axis.vertical,
+                                  child: Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: Text(
+                                      '${state.stock['data'][index]['title']}',
+                                      style: TextStyle(color: Colors.white, fontSize: 15),
                                     ),
                                   ),
                                 ),
@@ -73,11 +70,9 @@ class _StorageStockState extends State<StorageStock> {
                               Container(
                                 alignment: Alignment.topRight,
                                 margin: EdgeInsets.only(right: 30, top: 30, left: 10, bottom: 10),
-                                child: Expanded(
-                                    flex: 1,
-                                    child: Directionality(
-                                        textDirection: TextDirection.rtl,
-                                        child: Text('مقدار: ' + '${state.stock['data'][index]['amount']}' + ' ${state.stock['data'][index]['unit']}'))),
+                                child: Directionality(
+                                    textDirection: TextDirection.rtl,
+                                    child: Text('مقدار: ' + '${state.stock['data'][index]['amount']}' + ' ${state.stock['data'][index]['unit']}')),
                               )
                             ],
                           ),

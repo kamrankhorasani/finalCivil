@@ -2,11 +2,15 @@ import 'package:bloc/bloc.dart';
 import 'package:civil_project/data/network.dart';
 import 'package:civil_project/screens/homee/home_items.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 
 part 'activity_state.dart';
 
 class ActivityCubit extends Cubit<ActivityState> {
   ActivityCubit() : super(ActivityInitial());
+
+  String description = "";
+  double precent;
 
   Future getActivities({String token, int projectId, int activityId}) async {
     emit(LoadingActivity());
@@ -17,11 +21,15 @@ class ActivityCubit extends Cubit<ActivityState> {
           activityId: activityId,
           dateIn: globalDateController.text) as Map;
       print(body);
-      emit(LoadedActivity(body));
+      precent = (body['data'][0]['percent'] as int).toDouble()??0;
+      description = body['data'][0]['description']??"";
+      emit(LoadedActivity(
+          (body['data'][0]['percent']), body['data'][0]['description']));
     } catch (e) {
       print(e.toString());
     }
   }
+  //!Add is not usable anymore
 
   Future addActivity({
     String token,
@@ -50,14 +58,13 @@ class ActivityCubit extends Cubit<ActivityState> {
     }
   }
 
-  Future updateActivity(
-      {String token,
-      int projectId,
-      int activityId,
-      int itemId,
-      String title,
-      String description,
-      List files}) async {
+  Future updateActivity({
+    String token,
+    int projectId,
+    int activityId,
+    int percentVal,
+    String description,
+  }) async {
     emit(UpdatingActivity());
     try {
       final body = await Routing().updateDailyActivity(
@@ -65,10 +72,8 @@ class ActivityCubit extends Cubit<ActivityState> {
           projectId: projectId,
           activityId: activityId,
           dateIn: globalDateController.text,
-          itemId: itemId,
-          title: title,
           description: description,
-          files: files);
+          percentVal: percentVal);
       print(body);
       emit(ActivityUpdated(body["success"]));
       await getActivities(

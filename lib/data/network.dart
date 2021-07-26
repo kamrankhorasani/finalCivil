@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:meta/meta.dart';
 import 'package:http/http.dart' as http;
 import 'package:persian_datepicker/persian_datetime.dart';
@@ -52,6 +53,12 @@ class Routing {
     return ntk.apiCaller(params: {'token': token}, route: "project/user/Get");
   }
 
+  setPanel(String token, int projectId) async {
+    return ntk.apiCaller(
+        params: {"token": token, "projectId": projectId, "panel": "MOBILE"},
+        route: "active/project/update");
+  }
+
   getUser({@required String token, int projectId}) async {
     return ntk.apiCaller(
         params: {"token": token, "projectId": projectId}, route: 'user/get');
@@ -62,7 +69,6 @@ class Routing {
       'token': token,
     }, route: "provider/type/Get");
   }
-
 
   getProvider({String token}) async {
     return ntk.apiCaller(params: {"token": token}, route: "provider/Get");
@@ -130,6 +136,22 @@ class Routing {
     }, route: "masaleh/get");
   }
 
+  getFehrest(String token, int activityId) async {
+    return ntk.apiCaller(
+        params: {"token": token, "activityId": activityId},
+        route: "wbs/activity/fehrest/get");
+  }
+
+  getResource({String token, String type, String title1, int frm, int cnt}) {
+    return ntk.apiCaller(params: {
+      "token": token,
+      "type": type,
+      "title": title1,
+      "frm": frm,
+      "cnt": cnt
+    }, route: "resource/get");
+  }
+
   getStorageImportationByText(
       {String token, String type, String txt, int frm, int cnt}) {
     return ntk.apiCaller(params: {
@@ -156,13 +178,15 @@ class Routing {
       int itemId,
       int stockId,
       String description,
+      String fehrestCode,
       String amount}) async {
     return ntk.apiCaller(params: {
       "token": token,
       "itemId": itemId,
       "stockId": stockId,
       "info": description,
-      "amount_new": double.parse(numConverter(amount, isDate: false))
+      "amount_new": double.parse(numConverter(amount, isDate: false)),
+      "fehrestCode": fehrestCode
     }, route: "anbar/out/update");
   }
 
@@ -199,19 +223,47 @@ class Routing {
       String dateIn,
       String info,
       int activityId,
-      String amount}) {
+      String amount,
+      String fehrestCode}) {
     return ntk.apiCaller(params: {
       'token': token,
       'projectId': projectId,
       'activityId': activityId,
       'itemId': itemId,
       "info": info,
+      "fehrestCode": fehrestCode,
       'date_in': numConverter(dateIn),
-      'amount': double.parse(amount),
+      'amount': double.parse(numConverter(amount, isDate: false)),
     }, route: "anbar/out/add");
   }
 
-  setCurrentProject(@required String token, String phone, int projectId) {
+  addTajhizat(
+      String token,
+      int pid1,
+      int activityId,
+      String itemCode,
+      String dateIn,
+      String amount1,
+      String inf1,
+      String fehrestCode,
+      String priceRent,
+      String fromSource) async {
+    print("add Tajhizat");
+    return ntk.apiCaller(params: {
+      "token": token,
+      "projectId": pid1,
+      "activityId": activityId,
+      "itemCode": itemCode,
+      "date_in": numConverter(dateIn),
+      "amount": double.parse((numConverter(amount1, isDate: false))),
+      "info": inf1,
+      "fehrestCode": fehrestCode,
+      "priceRent": double.parse((numConverter(priceRent, isDate: false))),
+      "fromSource": fromSource
+    }, route: "tajhizat/add");
+  }
+
+  setCurrentProject(String token, String phone, int projectId) {
     return ntk.apiCaller(
         params: {'token': token, 'projectId': projectId, 'mobile': phone},
         route: "active/project/update");
@@ -375,24 +427,21 @@ class Routing {
         route: "daily/works/delete");
   }
 
-  updateDailyActivity(
-      {String token,
-      int itemId,
-      int projectId,
-      int activityId,
-      String dateIn,
-      String title,
-      String description,
-      List files}) async {
+  updateDailyActivity({
+    String token,
+    int projectId,
+    int activityId,
+    String dateIn,
+    int percentVal,
+    String description,
+  }) async {
     return ntk.apiCaller(params: {
       'token': token,
       "projectId": projectId,
       "activityId": activityId,
-      "itemId": itemId,
-      'title': title,
       'dateIn': numConverter(dateIn),
       'description': description,
-      'files': files
+      "percentVal": percentVal,
     }, route: "daily/works/update");
   }
 
@@ -975,21 +1024,19 @@ class Routing {
   updateRent(
       {String token,
       int itemId,
-      String titleOf,
-      String descriptionOf,
-      String dateEnd,
-      String dateStart,
-      String price,
-      List file}) async {
+      String info,
+      String amount,
+      String resourceCode,
+      String priceRent,
+      String fehrestCode}) async {
     return ntk.apiCaller(params: {
       "token": token,
       "itemId": itemId,
-      "titleOf": titleOf,
-      "descriptionOf": descriptionOf,
-      "dateStart": dateStart,
-      "dateEnd": dateEnd,
-      "price": double.parse(numConverter(price, isDate: false)),
-      "file": file
+      "info": info,
+      "amount": double.parse(numConverter(amount, isDate: false)),
+      "resourceCode": resourceCode,
+      "priceRent": double.parse(numConverter(priceRent, isDate: false)),
+      "fehrestCode": fehrestCode
     }, route: "daily/rent/update");
   }
 

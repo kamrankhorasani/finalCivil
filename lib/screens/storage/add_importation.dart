@@ -20,7 +20,7 @@ class SearchBox extends StatefulWidget {
 class _SearchBoxState extends State<SearchBox> {
   final TextEditingController _searchText = TextEditingController();
   final ScrollController _scrollController = ScrollController();
-  bool isLoading = false;
+  //bool isLoading = false;
   int _currentMax = 0;
   Timer _debounce;
 
@@ -72,122 +72,121 @@ class _SearchBoxState extends State<SearchBox> {
     final height = MediaQuery.of(context).size.height;
     return SimpleDialog(
       children: [
-        Padding(
-          padding: EdgeInsets.symmetric(
-              horizontal: width * 0.05, vertical: height * 0.01),
-          child: Directionality(
-              textDirection: TextDirection.rtl,
-              child: Container(
-                height: height * 0.6,
-                child: Column(
-                  children: [
-                    Container(
-                      margin: EdgeInsets.all(width * 0.02),
-                      padding: EdgeInsets.only(right: width * 0.02),
-                      height: height * 0.08,
-                      child: Directionality(
+        Directionality(
+            textDirection: TextDirection.rtl,
+            child: Container(
+              width: double.maxFinite,
+              child: Column(
+                children: [
+                  Container(
+                    margin: EdgeInsets.all(width * 0.02),
+                    padding: EdgeInsets.only(right: width * 0.02),
+                    height: height * 0.08,
+                    child: Directionality(
+                      textDirection: TextDirection.rtl,
+                      child: TextField(
+                        controller: _searchText,
+                        onChanged: _onSearchChanged,
                         textDirection: TextDirection.rtl,
-                        child: TextField(
-                          controller: _searchText,
-                          onChanged: _onSearchChanged,
-                          textDirection: TextDirection.rtl,
-                          maxLines: 1,
-                          decoration: InputDecoration(
-                            border: InputBorder.none,
-                            prefixIcon: Icon(Icons.search_sharp),
-                            hintText: "جستجو...",
-                          ),
+                        maxLines: 1,
+                        decoration: InputDecoration(
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.search_sharp),
+                          hintText: "جستجو...",
                         ),
                       ),
-                      decoration: containerShadow,
                     ),
-                    BlocBuilder<AddImportationCubit, AddImportationState>(
-                      builder: (context, state) {
-                        if (BlocProvider.of<AddImportationCubit>(context)
-                                    .searchedItems ==
-                                null ||
-                            BlocProvider.of<AddImportationCubit>(context)
-                                    .searchedItems
-                                    .length ==
-                                0) {
-                          return Center(
-                              child: Text("چیزی برای نمایش وجود ندارد"));
-                        }
-                        return Expanded(
-                            child: ListView.separated(
-                          controller: _scrollController,
-                          separatorBuilder: (context, index) => Divider(),
-                          itemCount:
-                              BlocProvider.of<AddImportationCubit>(context)
+                    decoration: containerShadow,
+                  ),
+                  BlocBuilder<AddImportationCubit, AddImportationState>(
+                    builder: (context, state) {
+                      if (BlocProvider.of<AddImportationCubit>(context)
+                                  .searchedItems ==
+                              null ||
+                          BlocProvider.of<AddImportationCubit>(context)
                                   .searchedItems
-                                  .length,
-                          itemBuilder: (context, index) {
-                            if (BlocProvider.of<AddImportationCubit>(context)
-                                    .searchedItems
-                                    .length ==
-                                index + 1) {
-                              return Center(
-                                child: CircularProgressIndicator(),
-                              );
-                            }
-                            return GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                  storageItemChoose =
-                                      BlocProvider.of<AddImportationCubit>(
-                                              context)
-                                          .searchedItems[index]['title'];
-                                  choiceItem =
-                                      BlocProvider.of<AddImportationCubit>(
-                                              context)
-                                          .searchedItems[index]['id'];
-                                  print(choiceItem);
-                                });
+                                  .length ==
+                              0) {
+                        return Center(
+                            child: Text("چیزی برای نمایش وجود ندارد"));
+                      }
+                      return Container(
+                          width: double.maxFinite,
+                          height: height*0.8,
+                          child: ListView.separated(
+                            controller: _scrollController,
+                            separatorBuilder: (context, index) => Divider(),
+                            itemCount: BlocProvider.of<AddImportationCubit>(
+                                    context)
+                                .searchedItems
+                                .length,
+                            itemBuilder: (context, index) {
+                              if (BlocProvider.of<AddImportationCubit>(
+                                          context)
+                                      .searchedItems
+                                      .length ==
+                                  index + 1) {
+                                return Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              }
+                              return GestureDetector(
+                                onTap: () {
+                                  setState(() {
+                                    storageItemChoose = BlocProvider.of<
+                                            AddImportationCubit>(context)
+                                        .searchedItems[index]['title'];
+                                    choiceItem = BlocProvider.of<
+                                            AddImportationCubit>(context)
+                                        .searchedItems[index]['id'];
+                                    print(choiceItem);
+                                  });
 
-                                BlocProvider.of<AddImportationCubit>(context)
-                                    .searchedItems
-                                    .clear();
-                                Navigator.pop(context);
-                              },
-                              child: Card(
-                                child: Padding(
-                                  padding: EdgeInsets.all(8.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    children: [
-                                      Text(
-                                        "${BlocProvider.of<AddImportationCubit>(context).searchedItems[index]['title'] ?? ""}" ??
-                                            "",
-                                        overflow: TextOverflow.ellipsis,
-                                      ),
-                                      SizedBox(
-                                        height: height * 0.05,
-                                      ),
-                                      Row(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.spaceAround,
-                                        children: [
-                                          Text(
-                                              "${BlocProvider.of<AddImportationCubit>(context).searchedItems[index]['code'] ?? ""}" ??
-                                                  ""),
-                                          Text(
-                                              "${BlocProvider.of<AddImportationCubit>(context).searchedItems[index]['unit'] ?? ""}" ??
-                                                  "")
-                                        ],
-                                      ),
-                                    ],
+                                  BlocProvider.of<AddImportationCubit>(
+                                          context)
+                                      .searchedItems
+                                      .clear();
+                                  Navigator.pop(context);
+                                },
+                                child: Card(
+                                  child: Padding(
+                                    padding: EdgeInsets.all(8.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          "${BlocProvider.of<AddImportationCubit>(context).searchedItems[index]['title'] ?? ""}" ??
+                                              "",
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
+                                        SizedBox(
+                                          height: height * 0.05,
+                                        ),
+                                        Row(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.spaceAround,
+                                          children: [
+                                            Text(
+                                                "${BlocProvider.of<AddImportationCubit>(context).searchedItems[index]['code'] ?? ""}" ??
+                                                    ""),
+                                            Text(
+                                                "${BlocProvider.of<AddImportationCubit>(context).searchedItems[index]['unit'] ?? ""}" ??
+                                                    "")
+                                          ],
+                                        ),
+                                      ],
+                                    ),
                                   ),
                                 ),
-                              ),
-                            );
-                          },
-                        ));
-                      },
-                    )
-                  ],
-                ),
-              )),
-        )
+                              );
+                            },
+                          ));
+                    },
+                  )
+                ],
+              ),
+            ))
       ],
     );
   }
@@ -442,7 +441,7 @@ class _AddImportationState extends State<AddImportation> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
         elevation: 10,
         color: Colors.green,
-        //Fuck gitlab
+
       ),
     );
   }

@@ -16,11 +16,12 @@ class StorageScreen extends StatelessWidget {
       child: Scaffold(
         drawer: Drawer(),
         appBar: AppBar(
+          centerTitle: true,
           bottom: TabBar(
             indicatorColor: Colors.amber,
             tabs: [Text("خروجی"), Text("موجودی"), Text("ورودی")],
           ),
-          title: Align(alignment: Alignment.centerRight, child: Text('پروژه')),
+          title: Text('انبار',style: TextStyle(fontWeight:FontWeight.bold)),
         ),
         body: TabBarView(
           children: [

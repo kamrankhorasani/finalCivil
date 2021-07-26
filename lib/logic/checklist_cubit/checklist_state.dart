@@ -12,8 +12,9 @@ class LoadingChecklist extends ChecklistState {}
 
 class LoadedChecklist extends ChecklistState {
   final Map checklists;
-
   LoadedChecklist(this.checklists);
+  List<Object> get props => [checklists];
+
 }
 
 class FailedLoadingChecklist extends ChecklistState {}

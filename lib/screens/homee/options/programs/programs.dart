@@ -76,367 +76,370 @@ class _ProgramDialogState extends State<ProgramDialog> {
       children: [
         Directionality(
           textDirection: TextDirection.rtl,
-          child: SingleChildScrollView(
-            padding: EdgeInsets.symmetric(horizontal: width * 0.05),
-            child: Column(
-              textDirection: TextDirection.rtl,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                BlocListener<ProgramCubit, ProgramState>(
-                  listener: (context, state) {
-                    if (state is AddedProgram) {
-                      _title.clear();
-                      _description.clear();
-                      _attachmenTitle.clear();
-                      setState(() {
-                        _pickedFiles = [];
-                        _encodedFiles = [];
-                      });
-                      Navigator.pop(context);
-                    }
-                    if (state is UpdatedProgram) {
-                      _title.clear();
-                      _description.clear();
-                      _attachmenTitle.clear();
-                      setState(() {
-                        _pickedFiles = [];
-                        _encodedFiles = [];
-                      });
-                      Navigator.pop(context);
-                    }
-                  },
-                  child: Container(),
-                ),
-                _textFields(height * 0.08, width,
-                    hintText: "عنوان ", controller: _title),
-                _textFields(height * 0.2, width,
-                    hintText: "توضیحات ", controller: _description),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Expanded(
-                      flex: 1,
-                      child: FloatingActionButton.extended(
-                        label:Icon(Icons.add),
-                        icon: Text("ضمیمه"),
-                        onPressed: () async {
-                          await showDialog(
-                              context: context,
-                              builder: (context) {
-                                return Container(
-                                  height: height * 0.3,
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: 20, vertical: 10),
-                                  child: SingleChildScrollView(
-                                    child: Column(
-                                      children: [
-                                        SimpleDialog(
-                                          title: Text("اضافه کردن فایل"),
-                                          contentPadding: EdgeInsets.symmetric(
-                                              horizontal: width * 0.1,
-                                              vertical: height * 0.05),
-                                          children: [
-                                            SizedBox(
-                                                height: 70,
-                                                width: 200,
-                                                child: _textFields(
-                                                    height * 0.09, width,
-                                                    hintText: "عنوان ضمیمه",
-                                                    controller:
-                                                        _attachmenTitle)),
-                                            Row(
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment
-                                                      .spaceBetween,
-                                              children: [
-                                                Expanded(
-                                                  child: RaisedButton(
-                                                      shape: CircleBorder(),
-                                                      child: Icon(
-                                                          Icons.camera_alt),
-                                                      onPressed: () async {
-                                                        final cameras =
-                                                            await availableCameras();
-                                                        final firstCamera =
-                                                            cameras.first;
-                                                        final rst = await Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    TakePictureScreen(
-                                                                        camera:
-                                                                            firstCamera)));
-
-                                                        if (rst == null) {
-                                                          print("Oh NO");
-                                                        } else {
-                                                          setState(() {
-                                                            _pickedFiles.add(
-                                                                FileModel(
-                                                                    image: Image
-                                                                        .file(
-                                                                      File(rst),
-                                                                      height:
-                                                                          height *
-                                                                              0.15,
-                                                                    ),
-                                                                    address:
-                                                                        rst,
-                                                                    title: _attachmenTitle
-                                                                        .text));
-                                                          });
-                                                          ss = File(rst);
-                                                          fileBytes = ss
-                                                              .readAsBytesSync();
-                                                          encoded =
-                                                              base64Encode(
-                                                                  fileBytes);
-                                                          _data =
-                                                              "data:image/jpg;base64,$encoded";
-                                                          _encodedFiles.add({
-                                                            "title":
-                                                                _attachmenTitle
-                                                                    .text,
-                                                            "file": _data
-                                                          });
-                                                          Navigator.pop(
-                                                              context);
-                                                        }
-                                                      }),
-                                                ),
-                                                Expanded(
-                                                  child: RaisedButton(
-                                                      child: Text("انتخاب"),
-                                                      onPressed: () async {
-                                                        result = await FilePicker
-                                                            .platform
-                                                            .pickFiles(
-                                                                allowMultiple:
-                                                                    false,
-                                                                type: FileType
-                                                                    .custom,
-                                                                allowedExtensions: [
-                                                              'jpg',
-                                                              'jpeg',
-                                                              'png',
-                                                              'pdf'
-                                                            ]);
-                                                        if (result != null) {
-                                                          if (result
-                                                                  .files
-                                                                  .single
-                                                                  .extension ==
-                                                              "pdf") {
-                                                            image = Image.asset(
-                                                                "assets/images/pdf.png",
-                                                                height: height *
-                                                                    0.15);
-                                                          } else {
-                                                            image = Image.file(
-                                                              File(result.files
-                                                                  .single.path),
-                                                              height:
-                                                                  height * 0.15,
-                                                            );
-                                                          }
-                                                          setState(() {
-                                                            _pickedFiles.add(FileModel(
-                                                                image: image,
-                                                                format: result
-                                                                    .files
-                                                                    .single
-                                                                    .extension,
-                                                                address: result
-                                                                    .files
-                                                                    .single
-                                                                    .path,
-                                                                title:
-                                                                    _attachmenTitle
-                                                                        .text));
-                                                          });
-
-                                                          ss = File(result.files
-                                                              .single.path);
-                                                          fileBytes = ss
-                                                              .readAsBytesSync();
-                                                          encoded =
-                                                              base64Encode(
-                                                                  fileBytes);
-                                                          if (result
-                                                                  .files
-                                                                  .single
-                                                                  .extension ==
-                                                              "pdf") {
-                                                            _data =
-                                                                "data:application/pdf/${result.files.single.extension};base64,$encoded";
-                                                          } else {
-                                                            _data =
-                                                                "data:image/${result.files.single.extension};base64,$encoded";
-                                                          }
-                                                          _encodedFiles.add({
-                                                            "title":
-                                                                _attachmenTitle
-                                                                    .text,
-                                                            "file": _data
-                                                          });
-                                                          Navigator.pop(
-                                                              context);
-                                                        } else {
-                                                          print("no");
-                                                        }
-                                                      }),
-                                                ),
-                                              ],
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              });
-                        },
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: SizedBox(
-                        height: height * 0.25,
-                        child: ListView.separated(
-                            physics: ScrollPhysics(),
-                            scrollDirection: Axis.horizontal,
-                            itemBuilder: (context, index) {
-                              return Stack(children: <Widget>[
-                                Column(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    GestureDetector(
-                                      onTap: () {
-                                        if (_pickedFiles[index].format ==
-                                            'pdf') {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) => PDFView(
-                                                      address:
-                                                          _pickedFiles[index]
-                                                              .address)));
-                                        } else {
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      ImageView(
-                                                          address: _pickedFiles[
-                                                                  index]
-                                                              .address)));
-                                        }
-                                      },
-                                      child: Padding(
-                                          padding: EdgeInsets.all(10),
-                                          child: _pickedFiles[index].image),
-                                    ),
-                                    Text(_pickedFiles[index].title)
-                                  ],
-                                ),
-                                Positioned(
-                                  height: 56,
-                                  width: 25,
-                                  top: -1,
-                                  right: -10,
-                                  child: IconButton(
-                                      icon: Icon(
-                                        Icons.cancel,
-                                        size: 30,
-                                        color: Colors.pinkAccent[400],
-                                      ),
-                                      onPressed: () {
-                                        setState(() {
-                                          _pickedFiles.removeAt(index);
-                                        });
-                                      }),
-                                )
-                              ]);
-                            },
-                            separatorBuilder: (context, index) =>
-                                VerticalDivider(),
-                            itemCount: _pickedFiles.length),
-                      ),
-                    ),
-                  ],
-                ),
-                BlocBuilder<ProgramCubit, ProgramState>(
-                  builder: (context, state) {
-                    if (state is AddingProgram) {
-                      return Center(child: CircularProgressIndicator());
-                    }
-                    if (state is UpdatingProgram) {
-                      return Center(child: CircularProgressIndicator());
-                    } else {
-                      return Container(
-                        height: height * 0.08,
-                        margin: EdgeInsets.symmetric(
-                            horizontal: width * 0.01, vertical: height * 0.05),
-                        child: RaisedButton(
-                          child: Text(
-                            "ثبت",
-                            style: TextStyle(color: Colors.white),
-                          ),
+          child: Container(
+            width: double.maxFinite,
+            child: SingleChildScrollView(
+              padding: EdgeInsets.symmetric(horizontal: width * 0.05),
+              child: Column(
+                textDirection: TextDirection.rtl,
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: [
+                  BlocListener<ProgramCubit, ProgramState>(
+                    listener: (context, state) {
+                      if (state is AddedProgram) {
+                        _title.clear();
+                        _description.clear();
+                        _attachmenTitle.clear();
+                        setState(() {
+                          _pickedFiles = [];
+                          _encodedFiles = [];
+                        });
+                        Navigator.pop(context);
+                      }
+                      if (state is UpdatedProgram) {
+                        _title.clear();
+                        _description.clear();
+                        _attachmenTitle.clear();
+                        setState(() {
+                          _pickedFiles = [];
+                          _encodedFiles = [];
+                        });
+                        Navigator.pop(context);
+                      }
+                    },
+                    child: Container(),
+                  ),
+                  _textFields(height * 0.08, width,
+                      hintText: "عنوان ", controller: _title),
+                  _textFields(height * 0.2, width,
+                      hintText: "توضیحات ", controller: _description),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Expanded(
+                        flex: 1,
+                        child: FloatingActionButton.extended(
+                          label:Icon(Icons.add),
+                          icon: Text("ضمیمه"),
                           onPressed: () async {
-                            if (widget.addOrupdate == true) {
-                              print("1");
-                              for (int i = 0; i < _pickedFiles.length; i++) {
-                                if (_pickedFiles[i].address.contains("omran")) {
-                                  _encodedFiles.add({
-                                    'title': _pickedFiles[i].title,
-                                    'file': _pickedFiles[i].address
-                                  });
-                                }
-                              }
-                              print("2");
-                              await BlocProvider.of<ProgramCubit>(context)
-                                  .updatingPrograms(   token:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .token,
-                                      projectId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .projectId,
-                                      activityId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .activityId,
-                                descriptionOf: _description.text,
-                                titleOf: _title.text,
-                                file: _encodedFiles,
-                                itemId: widget.itemId,
-                              );
-                              print("3");
-                            }
-                            if (widget.addOrupdate == false) {
-                              await BlocProvider.of<ProgramCubit>(context)
-                                  .addingProgram(   token:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .token,
-                                      projectId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .projectId,
-                                      activityId:
-                                          BlocProvider.of<LoginCubit>(context)
-                                              .activityId,
-                                      descriptionOf: _description.text,
-                                      titleOf: _title.text,
-                                      file: _encodedFiles);
-                            }
+                            await showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return Container(
+                                    height: height * 0.3,
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 10),
+                                    child: SingleChildScrollView(
+                                      child: Column(
+                                        children: [
+                                          SimpleDialog(
+                                            title: Text("اضافه کردن فایل"),
+                                            contentPadding: EdgeInsets.symmetric(
+                                                horizontal: width * 0.1,
+                                                vertical: height * 0.05),
+                                            children: [
+                                              SizedBox(
+                                                  height: 70,
+                                                  width: 200,
+                                                  child: _textFields(
+                                                      height * 0.09, width,
+                                                      hintText: "عنوان ضمیمه",
+                                                      controller:
+                                                          _attachmenTitle)),
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment
+                                                        .spaceBetween,
+                                                children: [
+                                                  Expanded(
+                                                    child: RaisedButton(
+                                                        shape: CircleBorder(),
+                                                        child: Icon(
+                                                            Icons.camera_alt),
+                                                        onPressed: () async {
+                                                          final cameras =
+                                                              await availableCameras();
+                                                          final firstCamera =
+                                                              cameras.first;
+                                                          final rst = await Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      TakePictureScreen(
+                                                                          camera:
+                                                                              firstCamera)));
+
+                                                          if (rst == null) {
+                                                            print("Oh NO");
+                                                          } else {
+                                                            setState(() {
+                                                              _pickedFiles.add(
+                                                                  FileModel(
+                                                                      image: Image
+                                                                          .file(
+                                                                        File(rst),
+                                                                        height:
+                                                                            height *
+                                                                                0.15,
+                                                                      ),
+                                                                      address:
+                                                                          rst,
+                                                                      title: _attachmenTitle
+                                                                          .text));
+                                                            });
+                                                            ss = File(rst);
+                                                            fileBytes = ss
+                                                                .readAsBytesSync();
+                                                            encoded =
+                                                                base64Encode(
+                                                                    fileBytes);
+                                                            _data =
+                                                                "data:image/jpg;base64,$encoded";
+                                                            _encodedFiles.add({
+                                                              "title":
+                                                                  _attachmenTitle
+                                                                      .text,
+                                                              "file": _data
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                          }
+                                                        }),
+                                                  ),
+                                                  Expanded(
+                                                    child: RaisedButton(
+                                                        child: Text("انتخاب"),
+                                                        onPressed: () async {
+                                                          result = await FilePicker
+                                                              .platform
+                                                              .pickFiles(
+                                                                  allowMultiple:
+                                                                      false,
+                                                                  type: FileType
+                                                                      .custom,
+                                                                  allowedExtensions: [
+                                                                'jpg',
+                                                                'jpeg',
+                                                                'png',
+                                                                'pdf'
+                                                              ]);
+                                                          if (result != null) {
+                                                            if (result
+                                                                    .files
+                                                                    .single
+                                                                    .extension ==
+                                                                "pdf") {
+                                                              image = Image.asset(
+                                                                  "assets/images/pdf.png",
+                                                                  height: height *
+                                                                      0.15);
+                                                            } else {
+                                                              image = Image.file(
+                                                                File(result.files
+                                                                    .single.path),
+                                                                height:
+                                                                    height * 0.15,
+                                                              );
+                                                            }
+                                                            setState(() {
+                                                              _pickedFiles.add(FileModel(
+                                                                  image: image,
+                                                                  format: result
+                                                                      .files
+                                                                      .single
+                                                                      .extension,
+                                                                  address: result
+                                                                      .files
+                                                                      .single
+                                                                      .path,
+                                                                  title:
+                                                                      _attachmenTitle
+                                                                          .text));
+                                                            });
+
+                                                            ss = File(result.files
+                                                                .single.path);
+                                                            fileBytes = ss
+                                                                .readAsBytesSync();
+                                                            encoded =
+                                                                base64Encode(
+                                                                    fileBytes);
+                                                            if (result
+                                                                    .files
+                                                                    .single
+                                                                    .extension ==
+                                                                "pdf") {
+                                                              _data =
+                                                                  "data:application/pdf/${result.files.single.extension};base64,$encoded";
+                                                            } else {
+                                                              _data =
+                                                                  "data:image/${result.files.single.extension};base64,$encoded";
+                                                            }
+                                                            _encodedFiles.add({
+                                                              "title":
+                                                                  _attachmenTitle
+                                                                      .text,
+                                                              "file": _data
+                                                            });
+                                                            Navigator.pop(
+                                                                context);
+                                                          } else {
+                                                            print("no");
+                                                          }
+                                                        }),
+                                                  ),
+                                                ],
+                                              ),
+                                            ],
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                });
                           },
-                          shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(10)),
-                          elevation: 10,
-                          color: Colors.green,
                         ),
-                      );
-                    }
-                  },
-                ),
-              ],
+                      ),
+                      Expanded(
+                        flex: 2,
+                        child: SizedBox(
+                          height: height * 0.25,
+                          child: ListView.separated(
+                              physics: ScrollPhysics(),
+                              scrollDirection: Axis.horizontal,
+                              itemBuilder: (context, index) {
+                                return Stack(children: <Widget>[
+                                  Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      GestureDetector(
+                                        onTap: () {
+                                          if (_pickedFiles[index].format ==
+                                              'pdf') {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) => PDFView(
+                                                        address:
+                                                            _pickedFiles[index]
+                                                                .address)));
+                                          } else {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        ImageView(
+                                                            address: _pickedFiles[
+                                                                    index]
+                                                                .address)));
+                                          }
+                                        },
+                                        child: Padding(
+                                            padding: EdgeInsets.all(10),
+                                            child: _pickedFiles[index].image),
+                                      ),
+                                      Text(_pickedFiles[index].title)
+                                    ],
+                                  ),
+                                  Positioned(
+                                    height: 56,
+                                    width: 25,
+                                    top: -1,
+                                    right: -10,
+                                    child: IconButton(
+                                        icon: Icon(
+                                          Icons.cancel,
+                                          size: 30,
+                                          color: Colors.pinkAccent[400],
+                                        ),
+                                        onPressed: () {
+                                          setState(() {
+                                            _pickedFiles.removeAt(index);
+                                          });
+                                        }),
+                                  )
+                                ]);
+                              },
+                              separatorBuilder: (context, index) =>
+                                  VerticalDivider(),
+                              itemCount: _pickedFiles.length),
+                        ),
+                      ),
+                    ],
+                  ),
+                  BlocBuilder<ProgramCubit, ProgramState>(
+                    builder: (context, state) {
+                      if (state is AddingProgram) {
+                        return Center(child: CircularProgressIndicator());
+                      }
+                      if (state is UpdatingProgram) {
+                        return Center(child: CircularProgressIndicator());
+                      } else {
+                        return Container(
+                          height: height * 0.08,
+                          margin: EdgeInsets.symmetric(
+                              horizontal: width * 0.01, vertical: height * 0.05),
+                          child: RaisedButton(
+                            child: Text(
+                              "ثبت",
+                              style: TextStyle(color: Colors.white),
+                            ),
+                            onPressed: () async {
+                              if (widget.addOrupdate == true) {
+                                print("1");
+                                for (int i = 0; i < _pickedFiles.length; i++) {
+                                  if (_pickedFiles[i].address.contains("omran")) {
+                                    _encodedFiles.add({
+                                      'title': _pickedFiles[i].title,
+                                      'file': _pickedFiles[i].address
+                                    });
+                                  }
+                                }
+                                print("2");
+                                await BlocProvider.of<ProgramCubit>(context)
+                                    .updatingPrograms(   token:
+                                            BlocProvider.of<LoginCubit>(context)
+                                                .token,
+                                        projectId:
+                                            BlocProvider.of<LoginCubit>(context)
+                                                .projectId,
+                                        activityId:
+                                            BlocProvider.of<LoginCubit>(context)
+                                                .activityId,
+                                  descriptionOf: _description.text,
+                                  titleOf: _title.text,
+                                  file: _encodedFiles,
+                                  itemId: widget.itemId,
+                                );
+                                print("3");
+                              }
+                              if (widget.addOrupdate == false) {
+                                await BlocProvider.of<ProgramCubit>(context)
+                                    .addingProgram(   token:
+                                            BlocProvider.of<LoginCubit>(context)
+                                                .token,
+                                        projectId:
+                                            BlocProvider.of<LoginCubit>(context)
+                                                .projectId,
+                                        activityId:
+                                            BlocProvider.of<LoginCubit>(context)
+                                                .activityId,
+                                        descriptionOf: _description.text,
+                                        titleOf: _title.text,
+                                        file: _encodedFiles);
+                              }
+                            },
+                            shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(10)),
+                            elevation: 10,
+                            color: Colors.green,
+                          ),
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
           ),
         ),

@@ -75,7 +75,7 @@ class _MyDialogState extends State<MyDialog> {
         ),
         items: items
             .map((e) => DropdownMenuItem(
-                  child: Text(e['firstName'] + e['lastName']),
+                  child: Text(e['firstName'] +" "+ e['lastName']),
                   value: e['id'],
                 ))
             .toList(),
@@ -136,11 +136,10 @@ class _MyDialogState extends State<MyDialog> {
                 GestureDetector(
                   onTap: () async => await _selectTime('from', context),
                   child: Container(
-                    height: height * 0.06,
+                    height: height * 0.04,
                     margin: EdgeInsets.symmetric(
                         vertical: height * 0.05, horizontal: width * 0.25),
-                    padding: EdgeInsets.only(
-                        top: height * 0.01, right: width * 0.01),
+
                     decoration: containerShadow,
                     child: Text(fromTime.text, textAlign: TextAlign.center),
                   ),
@@ -169,10 +168,9 @@ class _MyDialogState extends State<MyDialog> {
                   child: GestureDetector(
                     onTap: () async => await _selectTime('to', context),
                     child: Container(
-                      height: height * 0.06,
+                     height: height * 0.04,
                       margin: EdgeInsets.symmetric(horizontal: width * 0.25),
-                      padding: EdgeInsets.only(
-                          top: height * 0.01, right: width * 0.01),
+
                       decoration: containerShadow,
                       child: Text(toTime.text, textAlign: TextAlign.center),
                     ),

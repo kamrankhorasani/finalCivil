@@ -1,4 +1,4 @@
-import 'package:civil_project/constants/constantdecorations.dart';
+
 import 'package:civil_project/logic/login_cubit/login_cubit.dart';
 import 'package:civil_project/logic/storage_get_import_cubit/storage_get_import_cubit.dart';
 import 'package:flutter/material.dart';
@@ -90,118 +90,110 @@ class _StorageImportationState extends State<StorageImportation> {
                                       ),
                                     ],
                                   ),
-                                  child: Expanded(
-                                    child: Column(
-                                      children: [
-                                        Container(
-                                          alignment: Alignment.topRight,
-                                          height: 150,
-                                          margin: EdgeInsets.only(top: 30, right: 35),
-                                          child: Column(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Expanded(
-                                                flex: 2,
-                                                child: Container(
-                                                  alignment: Alignment.topRight,
-                                                  child: SingleChildScrollView(
-                                                    scrollDirection: Axis.vertical,
-                                                    child: Directionality(
-                                                      textDirection: TextDirection.rtl,
-                                                      child: Text(
-                                                        "${state.importations['data'][index]['title']}",
-                                                        style: TextStyle(
-                                                          color: Colors.white,
-                                                          fontSize: 15,
-                                                        ),
-                                                      ),
+                                  child: Column(
+                                    children: [
+                                      Container(
+                                        alignment: Alignment.topRight,
+                                        height: 150,
+                                        margin: EdgeInsets.only(top: 30, right: 35),
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Container(
+                                              alignment: Alignment.topRight,
+                                              child: SingleChildScrollView(
+                                                scrollDirection: Axis.vertical,
+                                                child: Directionality(
+                                                  textDirection: TextDirection.rtl,
+                                                  child: Text(
+                                                    "${state.importations['data'][index]['title']}",
+                                                    style: TextStyle(
+                                                      color: Colors.white,
+                                                      fontSize: 15,
                                                     ),
                                                   ),
                                                 ),
                                               ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                  alignment: Alignment.centerRight,
-                                                  child: Directionality(
-                                                    textDirection: TextDirection.rtl,
-                                                    child: Text(
-                                                      "${state.importations['data'][index]['amount']}" + " ${state.importations['data'][index]['unit']}" + "",
-                                                      style: TextStyle(
-                                                        fontSize: 15,
-                                                      ),
-                                                    ),
+                                            ),
+                                            Container(
+                                              alignment: Alignment.centerRight,
+                                              child: Directionality(
+                                                textDirection: TextDirection.rtl,
+                                                child: Text(
+                                                  "${state.importations['data'][index]['amount']}" + " ${state.importations['data'][index]['unit']}" + "",
+                                                  style: TextStyle(
+                                                    fontSize: 15,
                                                   ),
                                                 ),
                                               ),
-                                              Expanded(
-                                                flex: 1,
-                                                child: Container(
-                                                  alignment: Alignment.centerRight,
-                                                  child: Directionality(
-                                                    textDirection: TextDirection.rtl,
-                                                    child: Text(
-                                                      "تهیه کننده: " + "${state.importations['data'][index]['provider']}",
-                                                      style: TextStyle(fontSize: 15),
-                                                    ),
-                                                  ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ),
-                                        Expanded(
-                                            child: Container(
-                                          color: Colors.white,
-                                        )),
-                                        Container(
-                                          alignment: Alignment.centerLeft,
-                                          height: 19,
-                                          margin: EdgeInsets.only(left: 15),
-                                          child: Row(
-                                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                            children: [
-                                              Text("${state.importations['data'][index]['dateIn'].substring(10)}" + "  ${persianDate.toJalaali()}",
-                                                  maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w400, color: Colors.white, fontSize: 13)),
-                                              Container(
+                                            ),
+                                            Expanded(
+                                              flex: 1,
+                                              child: Container(
                                                 alignment: Alignment.centerRight,
                                                 child: Directionality(
                                                   textDirection: TextDirection.rtl,
-                                                  child: state.importations['data'][index]['confirms'] == null
-                                                      ? Text("وضعیت: بررسی نشده", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold))
-                                                      : SingleChildScrollView(
-                                                          scrollDirection: Axis.horizontal,
-                                                          child: Row(
-                                                            children: (state.importations['data'][index]['confirms'] as List)
-                                                                .map((e) => Row(
-                                                                      children: [
-                                                                        Text("وضعیت: ", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                                                                        Text("${e["role"]}:", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                                                                        Text("${e['response']['msg']}",
-                                                                            style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                                                                        e['is_confirm'] == 1
-                                                                            ? Container(
-                                                                                margin: EdgeInsets.only(right: 5),
-                                                                                child: Icon(
-                                                                                  Icons.thumb_up_alt,
-                                                                                  size: 17,
-                                                                                  color: Colors.green,
-                                                                                ),
-                                                                              )
-                                                                            : Container(
-                                                                                margin: EdgeInsets.only(right: 5), child: Icon(Icons.thumb_down_alt, size: 17, color: Colors.red)),
-                                                                      ],
-                                                                    ))
-                                                                .toList(),
-                                                          ),
-                                                        ),
+                                                  child: Text(
+                                                    "تهیه کننده: " + "${state.importations['data'][index]['provider']}",
+                                                    style: TextStyle(fontSize: 15),
+                                                  ),
                                                 ),
-                                              )
-                                            ],
-                                          ),
-                                        )
-                                      ],
-                                    ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                          child: Container(
+                                        color: Colors.white,
+                                      )),
+                                      Container(
+                                        alignment: Alignment.centerLeft,
+                                        height: 19,
+                                        margin: EdgeInsets.only(left: 15),
+                                        child: Row(
+                                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                          children: [
+                                            Text("${state.importations['data'][index]['dateIn'].substring(10)}" + "  ${persianDate.toJalaali()}",
+                                                maxLines: 1, overflow: TextOverflow.ellipsis, style: TextStyle(fontWeight: FontWeight.w400, color: Colors.white, fontSize: 13)),
+                                            Container(
+                                              alignment: Alignment.centerRight,
+                                              child: Directionality(
+                                                textDirection: TextDirection.rtl,
+                                                child: state.importations['data'][index]['confirms'] == null
+                                                    ? Text("وضعیت: بررسی نشده", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold))
+                                                    : SingleChildScrollView(
+                                                        scrollDirection: Axis.horizontal,
+                                                        child: Row(
+                                                          children: (state.importations['data'][index]['confirms'] as List)
+                                                              .map((e) => Row(
+                                                                    children: [
+                                                                      Text("وضعیت: ", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                                                                      Text("${e["role"]}:", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                                                                      Text("${e['response']['msg']}",
+                                                                          style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                                                                      e['is_confirm'] == 1
+                                                                          ? Container(
+                                                                              margin: EdgeInsets.only(right: 5),
+                                                                              child: Icon(
+                                                                                Icons.thumb_up_alt,
+                                                                                size: 17,
+                                                                                color: Colors.green,
+                                                                              ),
+                                                                            )
+                                                                          : Container(
+                                                                              margin: EdgeInsets.only(right: 5), child: Icon(Icons.thumb_down_alt, size: 17, color: Colors.red)),
+                                                                    ],
+                                                                  ))
+                                                              .toList(),
+                                                        ),
+                                                      ),
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )
+                                    ],
                                   ),
                                 ),
                                 Container(

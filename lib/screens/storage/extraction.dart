@@ -1,10 +1,10 @@
-import 'package:civil_project/constants/constantdecorations.dart';
+
 import 'package:civil_project/logic/login_cubit/login_cubit.dart';
 import 'package:civil_project/logic/storeage_get_extract_cubit/storeage_get_extract_cubit.dart';
 import 'package:civil_project/screens/homee/home_items.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:persian_datepicker/persian_datetime.dart';
+
 
 class StorageExtraction extends StatefulWidget {
   @override
@@ -23,7 +23,7 @@ class _StorageExtractionState extends State<StorageExtraction> {
   @override
   Widget build(BuildContext context) {
     final width = MediaQuery.of(context).size.width;
-    final height = MediaQuery.of(context).size.height;
+
     return Scaffold(
         floatingActionButton: Row(
           mainAxisAlignment: MainAxisAlignment.end,
@@ -100,138 +100,129 @@ class _StorageExtractionState extends State<StorageExtraction> {
                                           ),
                                         ],
                                       ),
-                                      child: Expanded(
-                                        child: Column(
-                                          children: [
-                                            Container(
-                                              alignment: Alignment.topRight,
-                                              height: 150,
-                                              margin: EdgeInsets.only(
-                                                  top: 30, right: 35),
-                                              child: Column(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Expanded(
-                                                    flex: 2,
-                                                    child: Container(alignment: Alignment.topRight,
-                                                      margin: EdgeInsets.only(
-                                                          left: 10),
-                                                      child:
-                                                          SingleChildScrollView(
-                                                        scrollDirection:
-                                                            Axis.vertical,
-                                                        child: Directionality(
-                                                          textDirection:
-                                                              TextDirection.rtl,
-                                                          child: Text(
-                                                            "${state.extraction['data'][index]['title']}",
-                                                            style: TextStyle(
-                                                              color:
-                                                                  Colors.white,
-                                                              fontSize: 15,
-                                                            ),
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Expanded(
-                                                    flex: 1,
-                                                    child: Container(
-                                                      alignment:
-                                                          Alignment.centerRight,
-                                                      child: Directionality(
-                                                        textDirection:
-                                                            TextDirection.rtl,
-                                                        child: Text(
-                                                          "مقدار: " +
-                                                              "${state.extraction['data'][index]['amount']}" +
-                                                              " ${state.extraction['data'][index]['unit']}" +
-                                                              "",
-                                                          style: TextStyle(
-                                                            fontSize: 15,
-                                                          ),
-                                                        ),
-                                                      ),
-                                                    ),
-                                                  ),
-                                                ],
-                                              ),
-                                            ),
-                                            Expanded(
-                                                child: Container(
-                                              color: Colors.white,
-                                            )),
-                                            Container(
-                                              alignment: Alignment.centerLeft,
-                                              height: 19,
-                                              margin: EdgeInsets.only(left: 15),
-                                              child: Row(
-                                                mainAxisAlignment:
-                                                    MainAxisAlignment
-                                                        .spaceBetween,
-                                                children: [
-                                                  Container(
-                                                    alignment:
-                                                        Alignment.centerLeft,
-                                                    margin: EdgeInsets.only(
-                                                        right: 10),
+                                      child: Column(
+                                        children: [
+                                          Container(
+                                            alignment: Alignment.topRight,
+                                            height: 150,
+                                            margin: EdgeInsets.only(
+                                                top: 30, right: 35),
+                                            child: Column(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(alignment: Alignment.topRight,
+                                                  margin: EdgeInsets.only(
+                                                      left: 10),
+                                                  child:
+                                                      SingleChildScrollView(
+                                                    scrollDirection:
+                                                        Axis.vertical,
                                                     child: Directionality(
                                                       textDirection:
                                                           TextDirection.rtl,
-                                                      child: state.extraction[
-                                                                          'data']
-                                                                      [index][
-                                                                  'confirms'] ==
-                                                              null
-                                                          ? Text(
-                                                              "وضعیت: بررسی نشده",
-                                                              style: TextStyle(
-                                                                  color: Colors
-                                                                      .white,
-                                                                  fontSize: 9,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold))
-                                                          : SingleChildScrollView(
-                                                              scrollDirection:
-                                                                  Axis.horizontal,
-                                                              child: Row(
-                                                                children: (state.extraction['data'][index]
-                                                                            [
-                                                                            'confirms']
-                                                                        as List)
-                                                                    .map(
-                                                                        (e) =>
-                                                                            Row(
-                                                                              children: [
-                                                                                Text("وضعیت: ", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                                                                                Text("${e["role"]}:", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                                                                                Text("${e['response']['msg']}", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
-                                                                                e['is_confirm'] == 1
-                                                                                    ? Container(
-                                                                                        margin: EdgeInsets.only(right: 5),
-                                                                                        child: Icon(
-                                                                                          Icons.thumb_up_alt,
-                                                                                          size: 17,
-                                                                                          color: Colors.green,
-                                                                                        ),
-                                                                                      )
-                                                                                    : Container(margin: EdgeInsets.only(right: 5), child: Icon(Icons.thumb_down_alt, size: 17, color: Colors.red)),
-                                                                              ],
-                                                                            ))
-                                                                    .toList(),
-                                                              ),
-                                                            ),
+                                                      child: Text(
+                                                        "${state.extraction['data'][index]['title']}",
+                                                        style: TextStyle(
+                                                          color:
+                                                              Colors.white,
+                                                          fontSize: 15,
+                                                        ),
+                                                      ),
                                                     ),
-                                                  )
-                                                ],
-                                              ),
-                                            )
-                                          ],
-                                        ),
+                                                  ),
+                                                ),
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerRight,
+                                                  child: Directionality(
+                                                    textDirection:
+                                                        TextDirection.rtl,
+                                                    child: Text(
+                                                      "مقدار: " +
+                                                          "${state.extraction['data'][index]['amount']}" +
+                                                          " ${state.extraction['data'][index]['unit']}" +
+                                                          "",
+                                                      style: TextStyle(
+                                                        fontSize: 15,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                          Container(
+                                            color: Colors.white,
+                                          ),
+                                          Container(
+                                            alignment: Alignment.centerLeft,
+                                            height: 19,
+                                            margin: EdgeInsets.only(left: 15),
+                                            child: Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Container(
+                                                  alignment:
+                                                      Alignment.centerLeft,
+                                                  margin: EdgeInsets.only(
+                                                      right: 10),
+                                                  child: Directionality(
+                                                    textDirection:
+                                                        TextDirection.rtl,
+                                                    child: state.extraction[
+                                                                        'data']
+                                                                    [index][
+                                                                'confirms'] ==
+                                                            null
+                                                        ? Text(
+                                                            "وضعیت: بررسی نشده",
+                                                            style: TextStyle(
+                                                                color: Colors
+                                                                    .white,
+                                                                fontSize: 9,
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .bold))
+                                                        : SingleChildScrollView(
+                                                            scrollDirection:
+                                                                Axis.horizontal,
+                                                            child: Row(
+                                                              children: (state.extraction['data'][index]
+                                                                          [
+                                                                          'confirms']
+                                                                      as List)
+                                                                  .map(
+                                                                      (e) =>
+                                                                          Row(
+                                                                            children: [
+                                                                              Text("وضعیت: ", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                                                                              Text("${e["role"]}:", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                                                                              Text("${e['response']['msg']}", style: TextStyle(color: Colors.white, fontSize: 9, fontWeight: FontWeight.bold)),
+                                                                              e['is_confirm'] == 1
+                                                                                  ? Container(
+                                                                                      margin: EdgeInsets.only(right: 5),
+                                                                                      child: Icon(
+                                                                                        Icons.thumb_up_alt,
+                                                                                        size: 17,
+                                                                                        color: Colors.green,
+                                                                                      ),
+                                                                                    )
+                                                                                  : Container(margin: EdgeInsets.only(right: 5), child: Icon(Icons.thumb_down_alt, size: 17, color: Colors.red)),
+                                                                            ],
+                                                                          ))
+                                                                  .toList(),
+                                                            ),
+                                                          ),
+                                                  ),
+                                                )
+                                              ],
+                                            ),
+                                          )
+                                        ],
                                       ),
                                     ),
                                     Container(

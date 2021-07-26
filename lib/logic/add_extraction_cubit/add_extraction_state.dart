@@ -11,14 +11,14 @@ class AddExtractionInitial extends AddExtractionState {}
 
 class LoadingMaterials extends AddExtractionState {}
 
-
 class LoadedMaterials extends AddExtractionState {
   final Map materials;
   final Map storageExtractions;
+  final Map fehrest;
 
-  LoadedMaterials(this.materials, this.storageExtractions);
+  LoadedMaterials(this.materials, this.storageExtractions,this.fehrest);
   @override
-  List<Object> get props => [materials, storageExtractions];
+  List<Object> get props => [materials, storageExtractions,fehrest];
 }
 
 class FailedLoadingMaterials extends AddExtractionState {}
@@ -52,3 +52,4 @@ class UpdatedExtraction extends AddExtractionState {
 }
 
 class FailedUpdatingExtraction extends AddExtractionState {}
+
